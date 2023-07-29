@@ -1,8 +1,13 @@
 const con = require("../config/database");
+var Check = require("../models/check");
 
-exports.signinCustomer = async (req, res) => {
+exports.signinCustomer = (req, res) => {
   const { username, password } = req.body;
-  console.log("line5");
+  const { error } = Check.check("identification_customers", req.body);
+  if (error) {
+    console.log(error.details[0].message);
+    return res.status(400).send(error.details[0].message);
+  }
   // Check if the username already exists in the database
   const usernameQuery =
     "SELECT COUNT(*) as count FROM identification_customers WHERE username = ?";
@@ -15,7 +20,6 @@ exports.signinCustomer = async (req, res) => {
 
       if (usernameCount > 0) {
         res.status(408).json({ error: "Username already exists" });
-        console.log("line18");
       } else {
         // Get the maximum customer_id from the database and increment it by 1
         const getMaxIdQuery =
@@ -31,7 +35,6 @@ exports.signinCustomer = async (req, res) => {
             const insertQuery =
               "INSERT INTO identification_customers (customer_id, username, password) VALUES (?, ?, ?)";
             const values = [nextCustomerId, username, password];
-            console.log("line34");
             con.query(insertQuery, values, (insertErr, insertResult) => {
               if (insertErr) {
                 console.log("Error inserting customer:", insertErr);

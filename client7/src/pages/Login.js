@@ -131,7 +131,7 @@ const Login = () => {
     }
     let cus = {
       username: "talya2",
-      password: 1,
+      //password: 1,
     };
     requestsPost(path, cus);
     console.log("line137");
