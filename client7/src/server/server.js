@@ -1,11 +1,15 @@
-const express = require("express");
 const customerRouter = require("./routes/customerRouter");
 
-const app = express();
+const express = require("express");
+const cors = require("cors");
 
+const app = express();
+app.use(cors());
+
+app.use(express.json());
 // Use the router for the '/customers' route
-app.use("/signInCustomers", customerRouter);
-app.use("/logInCustomers", customerRouter);
+//app.use("/signInCustomers", customerRouter);
+app.use("/customers", customerRouter);
 
 // Start the server
 const PORT = 3001;

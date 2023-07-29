@@ -106,8 +106,8 @@ const Login = () => {
   const [inputs, setInputs] = useState({});
 
   useEffect(() => {
-    const hostname = "http://localhost:4000";
-    let path = "/signInCustomers";
+    const hostname = "http://localhost:3001";
+    let path = "/customers/signIn";
 
     async function requestsPost(path, object) {
       let requestBody;
@@ -130,10 +130,11 @@ const Login = () => {
       return await response.json();
     }
     let cus = {
-      username: "talya",
+      username: "talya2",
       password: 1,
     };
     requestsPost(path, cus);
+    console.log("line137");
   }, []);
 
   const handleChange = (event) => {

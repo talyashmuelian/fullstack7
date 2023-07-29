@@ -2,7 +2,7 @@ const con = require("../config/database");
 
 exports.signinCustomer = async (req, res) => {
   const { username, password } = req.body;
-
+  console.log("line5");
   // Check if the username already exists in the database
   const usernameQuery =
     "SELECT COUNT(*) as count FROM identification_customers WHERE username = ?";
@@ -14,7 +14,8 @@ exports.signinCustomer = async (req, res) => {
       const usernameCount = usernameResult[0].count;
 
       if (usernameCount > 0) {
-        res.status(409).json({ error: "Username already exists" });
+        res.status(408).json({ error: "Username already exists" });
+        console.log("line18");
       } else {
         // Get the maximum customer_id from the database and increment it by 1
         const getMaxIdQuery =
@@ -30,7 +31,7 @@ exports.signinCustomer = async (req, res) => {
             const insertQuery =
               "INSERT INTO identification_customers (customer_id, username, password) VALUES (?, ?, ?)";
             const values = [nextCustomerId, username, password];
-
+            console.log("line34");
             con.query(insertQuery, values, (insertErr, insertResult) => {
               if (insertErr) {
                 console.log("Error inserting customer:", insertErr);
@@ -62,15 +63,17 @@ exports.loginCustomer = async (req, res) => {
   con.query(loginQuery, [username], async (loginErr, loginResult) => {
     if (loginErr) {
       console.error("Error checking login credentials:", loginErr);
-      return res
-        .status(500)
-        .json({ error: "Error checking login credentials" });
+
+      res.status(500).json({ error: "Error checking login credentials" });
+      res.send();
     }
 
     // If no user with the given username is found, return an error
     if (loginResult.length === 0) {
       console.log("Invalid credentials");
-      return res.status(404).json({ error: "Invalid credentials" });
+
+      res.status(404).json({ error: "Invalid credentials" });
+      //res.send();
     }
 
     // Compare the provided password with the hashed password from the database
@@ -82,13 +85,16 @@ exports.loginCustomer = async (req, res) => {
       if (isPasswordValid) {
         // Passwords match, user is authenticated
         res.status(200).json({ message: "Login successful" });
+        //res.send("hi");
       } else {
         // Passwords do not match, authentication failed
         res.status(401).json({ error: "Invalid credentials" });
+        //res.send();
       }
     } catch (passwordError) {
       console.error("Error comparing passwords:", passwordError);
       res.status(500).json({ error: "Error comparing passwords" });
+      //res.send();
     }
   });
 };

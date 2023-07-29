@@ -11,7 +11,6 @@ const custumerController = require("../controllers/custumerController");
 //const pool = mysql.createPool(dbConfig);
 
 // Route to handle the POST request for creating a new customer
-router.post("/signInCustomers", custumerController.signinCustomer);
-router.get("/logInCustomers", custumerController.loginCustomer);
-
+router.post("/signIn", custumerController.signinCustomer);
+router.get("/logIn", custumerController.loginCustomer);
 module.exports = router;
