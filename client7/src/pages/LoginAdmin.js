@@ -4,41 +4,9 @@ import "../css/Login.css";
 import { requestsGet } from "../requestsFromServer.js";
 import { useNavigate, NavLink } from "react-router-dom";
 
-const Login = () => {
+const LoginAdmin = () => {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({});
-
-  // useEffect(() => {
-  //   const hostname = "http://localhost:3001";
-  //   let path = "/customers/signIn";
-
-  //   async function requestsPost(path, object) {
-  //     let requestBody;
-  //     if (typeof object === "string") {
-  //       requestBody = object;
-  //     } else {
-  //       requestBody = JSON.stringify(object);
-  //     }
-
-  //     console.log(requestBody);
-
-  //     const response = await fetch(hostname + path, {
-  //       method: "POST",
-  //       body: requestBody,
-  //       headers: {
-  //         "Content-type": "application/json",
-  //       },
-  //     });
-
-  //     return await response.json();
-  //   }
-  //   let cus = {
-  //     username: "talya2",
-  //     //password: 1,
-  //   };
-  //   requestsPost(path, cus);
-  //   console.log("line137");
-  // }, []);
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -49,7 +17,7 @@ const Login = () => {
   async function fetchData() {
     try {
       const response = await requestsGet(
-        `/customers/logIn?username=${inputs.username}&password=${inputs.password}`
+        `/admin/logIn?username=${inputs.username}&password=${inputs.password}`
       );
       let data = await response.json();
       let status = response.status;
@@ -77,7 +45,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit}>
-        <h1>Login</h1>
+        <h1>Login As Admin</h1>
         <div className="form-group">
           <label htmlFor="username">Username:</label>
           <input
@@ -103,11 +71,11 @@ const Login = () => {
           <Link to={`/Signin`}>Sign In</Link>
         </div>
         <div>
-          <Link to={`/LoginAdmin`}>Login as Admin</Link>
+          <Link to={`/LoginAdmin`}>Login as Customer</Link>
         </div>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default LoginAdmin;

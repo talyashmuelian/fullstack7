@@ -7,15 +7,6 @@
     height: 100vh;
   }
   
-  /* Styling for the registration container */
-  .registration-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
   /* Styling for the form */
   form {
     display: flex;
@@ -62,7 +53,7 @@
     background-color: #0056b3;
   }
   
-  /* Styling for the "Sign In" and "Login" links */
+  /* Styling for the "Sign In" link */
   div > a {
     text-decoration: none;
     color: #007bff;
@@ -71,15 +62,5 @@
   
   div > a:hover {
     text-decoration: underline;
-  }
-  
-  /* Styling for the additional information section (visible on registration) */
-  .additional-info {
-    visibility: hidden;
-  }
-  
-  /* Styling for the visible additional information */
-  .additional-info.visible {
-    visibility: visible;
   }
   

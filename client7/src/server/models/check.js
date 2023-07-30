@@ -5,11 +5,19 @@ const schemaIdentification_customers = Joi.object().keys({
   password: Joi.string().required(),
 });
 
-const schemaTodo = Joi.object().keys({
-  userId: Joi.number().required(),
-  id: Joi.number().required(),
-  title: Joi.string().required(),
-  completed: Joi.number().valid(0, 1).required(),
+const schemaCustomer_information = Joi.object().keys({
+  name: Joi.string().required(),
+  id_number: Joi.number().required(),
+  phone: Joi.number().required(),
+  email: Joi.string().required(),
+});
+const schemaCustomer = Joi.object().keys({
+  username: Joi.string().required(),
+  password: Joi.string().required(),
+  name: Joi.string().required(),
+  id_number: Joi.number().required(),
+  phone: Joi.number().required(),
+  email: Joi.string().required(),
 });
 
 const schemaPosts = Joi.object().keys({
@@ -35,7 +43,8 @@ const schemaPasswords = Joi.object().keys({
 
 const ObjectCheck = {
   identification_customers: schemaIdentification_customers,
-  todos: schemaTodo,
+  customer_information: schemaCustomer_information,
+  customer: schemaCustomer,
   posts: schemaPosts,
   comments: schemaComments,
   passwords: schemaPasswords,
