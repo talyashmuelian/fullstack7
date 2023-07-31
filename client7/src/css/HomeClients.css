@@ -1,0 +1,175 @@
+
+
+/* .users-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .user-name {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #4285F4;
+  }
+  
+  .logout-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .logout-button:hover {
+    background-color: #d32f2f;
+  }
+  
+  .user-navigation {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .user-navigation ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .user-navigation ul li {
+    margin-bottom: 10px;
+  }
+  
+  .user-navigation ul li a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    transition: color 0.2s ease;
+  }
+  
+  .user-navigation ul li a svg {
+    margin-right: 10px;
+  }
+  
+  .user-navigation ul li a:hover {
+    color: #4285F4;
+  }
+  
+  .sub-menu {
+    display: none;
+    margin-left: 20px;
+    padding-left: 10px;
+    border-left: 2px solid #0F9D58;
+  }
+  
+  .sub-menu li {
+    margin-bottom: 5px;
+  }
+  
+  .sub-menu li a {
+    font-size: 16px;
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  
+  .sub-menu li a:hover {
+    color: #333;
+  }
+  
+  
+  @media (max-width: 768px) {
+    .users-container {
+      padding: 10px;
+    }
+  
+    .user-name {
+      font-size: 24px;
+    }
+  
+    .logout-button {
+      margin-bottom: 10px;
+    }
+    
+    .user-navigation ul li a {
+      font-size: 16px;
+    }
+  
+    .sub-menu {
+      margin-left: 15px;
+      padding-left: 8px;
+      border-left: 2px solid #0F9D58;
+    }
+  } */
+  
+
+
+.users-container {
+    padding: 20px;
+  }
+  
+  .user-name {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .logout-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  
+  .user-navigation ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .user-navigation ul li {
+    margin-bottom: 5px;
+  }
+  
+  .user-navigation ul li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    font-size: 18px;
+  }
+  
+  .sub-menu {
+    display: none;
+    margin-left: 15px;
+  }
+  
+  .user-navigation ul li:hover .sub-menu {
+    display: block;
+  }
+  
+  .sub-menu li {
+    margin-bottom: 5px;
+  }
+  
+  .sub-menu li a {
+    font-size: 16px;
+    color: #666;
+  }
+  
+  .sub-menu li a:hover {
+    color: #000;
+  }
+  

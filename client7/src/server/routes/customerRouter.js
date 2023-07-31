@@ -13,4 +13,5 @@ const custumerController = require("../controllers/custumerController");
 // Route to handle the POST request for creating a new customer
 router.post("/signIn", custumerController.signinCustomer);
 router.get("/logIn", custumerController.loginCustomer);
+router.get("/:id/info", custumerController.getCustomerInfo);
 module.exports = router;

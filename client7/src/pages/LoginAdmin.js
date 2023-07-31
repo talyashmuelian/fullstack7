@@ -25,7 +25,7 @@ const LoginAdmin = () => {
       console.log(data);
       if (status === 200) {
         localStorage.setItem("currentUserID", data.id);
-        navigate("/HomeClients");
+        navigate("/HomeAdmin");
       } else {
         alert("Username or password is incorrect");
       }

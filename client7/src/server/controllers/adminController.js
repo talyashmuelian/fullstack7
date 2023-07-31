@@ -7,13 +7,12 @@ exports.loginAdmin = async (req, res) => {
 
   // Check if the username and password exist together in the database
   const loginQuery =
-    "SELECT * FROM identification_customers WHERE username = ?";
+    "SELECT * FROM identification_customers natural join admin WHERE username = ?";
   con.query(loginQuery, [username], async (loginErr, loginResult) => {
     if (loginErr) {
       console.error("Error checking login credentials:", loginErr);
 
       res.status(500).json({ error: "Error checking login credentials" });
-      res.send();
     }
 
     // If no user with the given username is found, return an error
@@ -32,10 +31,8 @@ exports.loginAdmin = async (req, res) => {
 
       if (isPasswordValid) {
         // Passwords match, user is authenticated
-        // res.status(200).json({ message: "Login successful", });
 
         res.status(200).json({ id: loginResult[0].customer_id });
-        res.send();
       } else {
         // Passwords do not match, authentication failed
         res.status(401).json({ error: "Invalid credentials" });

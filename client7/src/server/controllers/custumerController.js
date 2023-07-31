@@ -116,50 +116,37 @@ exports.loginCustomer = async (req, res) => {
   });
 };
 
-// exports.loginCustomer = async (req, res) => {
-//   console.log("hi");
-//   const { username, password } = req.query;
+exports.getCustomerInfo = async (req, res) => {
+  const id = req.params.id;
 
-//   // Check if the username and password exist together in the database
-//   const loginQuery =
-//     "SELECT * FROM identification_customers WHERE username = ?";
-//   try {
-//     const loginResult = await new Promise((resolve, reject) => {
-//       con.query(loginQuery, [username], (loginErr, loginResult) => {
-//         if (loginErr) {
-//           console.error("Error checking login credentials:", loginErr);
-//           reject("Error checking login credentials");
-//         }
-//         resolve(loginResult);
-//       });
-//     });
+  // Check if the 'id' parameter is provided
+  if (!id) {
+    res.status(400).json({ error: "Missing customer ID parameter" });
+    return;
+  }
 
-//     // If no user with the given username is found, return an error
-//     if (loginResult.length === 0) {
-//       console.log("Invalid credentials");
-//       res.status(404).json({ error: "Invalid credentials" });
-//       res.send("");
-//     } else {
-//       // Compare the provided password with the hashed password from the database
-//       const hashedPassword = loginResult[0].password;
-//       const isPasswordValid = password === hashedPassword;
+  try {
+    // Get customer information from the database
+    const query =
+      "SELECT * FROM identification_customers WHERE customer_id = ?";
+    pool.query(query, [id], (err, result) => {
+      if (err) {
+        console.error("Error fetching customer info:", err);
+        res.status(500).json({ error: "Error fetching customer info" });
+        return;
+      }
 
-//       if (isPasswordValid) {
-//         // Passwords match, user is authenticated
-//         const result = { message: "Login successful", loginResult };
-//         res.status(200).json(result);
-//         res.send(result);
-//       } else {
-//         // Passwords do not match, authentication failed
-//         const result = { error: "Invalid credentials", loginResult };
-//         res.status(401).json(result);
-//         //res.send(result);
-//       }
-//     }
-//   } catch (error) {
-//     console.error("Error occurred:", error);
-//     const result = { error: "Error occurred", loginResult: [] };
-//     res.status(500).json(result);
-//     //res.send(result);
-//   }
-// };
+      // If no customer with the given ID is found, return an error
+      if (result.length === 0) {
+        res.status(404).json({ error: "Customer not found" });
+        return;
+      }
+
+      // Customer found, send the customer info in the response
+      res.status(200).json({ customer: result[0] });
+    });
+  } catch (error) {
+    console.error("Error processing request:", error);
+    res.status(500).json({ error: "Error processing request" });
+  }
+};
