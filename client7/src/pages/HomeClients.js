@@ -30,7 +30,7 @@ const HomeClients = () => {
       <nav className="user-navigation">
         <ul>
           <li>
-            <Link to={`/Users/${userID}/Appointments`}>Appointments</Link>
+            <Link>Appointments</Link>
             <ul className="sub-menu">
               <li>
                 <Link to={`/Users/${userID}/Appointments/MakeAppointment`}>
@@ -53,10 +53,10 @@ const HomeClients = () => {
             <Link to={`/Users/${userID}/Payments`}>Payments</Link>
           </li>
           <li>
-            <Link to={`/Users/${userID}/Notices`}>Notices</Link>
+            <Link to={`/Users/${userID}/Messages`}>Messages</Link>
           </li>
           <li>
-            <Link to={`/Users/${userID}/Requests`}>Requests</Link>
+            <Link>Requests</Link>
             <ul className="sub-menu">
               <li>
                 <Link to={`/Users/${userID}/Requests/MyRequests`}>

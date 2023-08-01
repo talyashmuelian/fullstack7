@@ -1,0 +1,139 @@
+/* MakeAppointment.css */
+
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5; /* Light Grey */
+  }
+  
+  .make-appointment-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* Week Schedule Styles */
+  .week-schedule {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .day {
+    cursor: pointer;
+    font-size: 18px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #3b5998; /* Facebook Blue */
+    color: #fff;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .day:hover {
+    background-color: #203b82; /* Darker Facebook Blue */
+  }
+  
+  /* Queues Styles */
+  .queues {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .queues div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .queues button {
+    background-color: #3b5998; /* Facebook Blue */
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .queues button:hover {
+    background-color: #203b82; /* Darker Facebook Blue */
+  }
+  
+  /* Appointment Form Styles */
+  .appointment-form {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .appointment-form.open {
+    display: flex;
+  }
+  
+  .appointment-form h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .appointment-form input,
+  .appointment-form textarea,
+  .appointment-form button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  
+  .appointment-form button {
+    background-color: #3b5998; /* Facebook Blue */
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  /* Request Exchange Modal Styles */
+  .request-exchange-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .request-exchange-modal.open {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .request-exchange-modal h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .request-exchange-modal button {
+    background-color: #3b5998; /* Facebook Blue */
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  

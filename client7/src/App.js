@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Signin from "./pages/Signin";
 import LoginAdmin from "./pages/LoginAdmin";
 import HomeClients from "./pages/HomeClients";
+import MakeAppointment from "./pages/MakeAppointment";
 
 function App() {
   return (
@@ -16,11 +17,22 @@ function App() {
         <Route path="/Signin" element={<Signin />} />
         <Route path="/LoginAdmin" element={<LoginAdmin />} />
         <Route path="/HomeClients" element={<HomeClients />} />
-        {/* <Route path="Users" element={<Users />}>
-          <Route path=":id/Posts" element={<Posts />} />
-          <Route path=":id/Todos" element={<Todos />} />
-          <Route path=":id/Info" element={<Info />} />
-        </Route> */}
+        <Route path="Users" element={<HomeClients />}>
+          <Route path=":id/Home" index />
+          <Route
+            path=":id/Appointments/MakeAppointment"
+            element={<MakeAppointment />}
+          />
+          <Route path=":id/Appointments/History" element={<Login />} />
+          <Route path=":id/Appointments/Future" element={<Login />} />
+          <Route path=":id/Payments" element={<Login />} />
+
+          <Route path=":id/Messages" element={<Login />} />
+
+          <Route path=":id/Requests/MyRequests" element={<Login />} />
+
+          <Route path=":id/Requests/RequestsForMe" element={<Login />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
