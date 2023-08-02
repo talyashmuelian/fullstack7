@@ -9,7 +9,7 @@ const MakeAppointment = () => {
   const [customer_id, setCustomer_id] = useState("");
   const [formData, setFormData] = useState({
     additionalInfo: "",
-    reminder: false,
+    reminder: 0,
   });
 
   // Fetch all future queues, both available and occupied, on component mount
@@ -121,9 +121,13 @@ const MakeAppointment = () => {
               type="checkbox"
               placeholder="reminder"
               value={formData.reminder}
-              onChange={(e) =>
-                setFormData({ ...formData, reminder: e.target.value })
-              }
+              onChange={(e) => {
+                let temp;
+                if (e.target == false) {
+                  temp = 0;
+                } else temp = 1;
+                setFormData({ ...formData, reminder: temp });
+              }}
             />
             {/* Add more form fields as needed */}
             <button type="submit">Set an Appointment</button>

@@ -129,7 +129,7 @@ exports.getCustomerInfo = async (req, res) => {
     // Get customer information from the database
     const query =
       "SELECT * FROM identification_customers WHERE customer_id = ?";
-    pool.query(query, [id], (err, result) => {
+    con.query(query, [id], (err, result) => {
       if (err) {
         console.error("Error fetching customer info:", err);
         res.status(500).json({ error: "Error fetching customer info" });

@@ -105,7 +105,7 @@ exports.getOccupiedAppointments = async (req, res) => {
 };
 
 exports.makeAppointment = async (req, res) => {
-  const { customer_id, appointment_id, reminder } = req.body;
+  const { customer_id, appointment_id, reminder, additionalInfo } = req.body;
 
   try {
     // Check if the appointment_id exists in the appointments table
@@ -129,10 +129,10 @@ exports.makeAppointment = async (req, res) => {
 
         // Check if the appointment_id already exists for the given customer in customer_appointment table
         const checkCustomerAppointmentQuery =
-          "SELECT * FROM customer_appointment WHERE customer_id = ? AND appointment_id = ?";
+          "SELECT * FROM customer_appointment WHERE appointment_id = ?";
         con.query(
           checkCustomerAppointmentQuery,
-          [customer_id, appointment_id],
+          [appointment_id],
           (checkCustAppErr, checkCustAppResult) => {
             if (checkCustAppErr) {
               console.error(
@@ -145,35 +145,53 @@ exports.makeAppointment = async (req, res) => {
               return;
             }
 
-            // If appointment_id already exists for the given customer, return an error
+            // If appointment_id already exists for any customer, return an error
             if (checkCustAppResult.length > 0) {
-              res
-                .status(409)
-                .json({ error: "Appointment already exists for the customer" });
+              res.status(409).json({
+                error: "Appointment already exists for another customer",
+              });
               return;
             }
 
-            // Insert the new appointment in the customer_appointment table
-            const insertQuery =
-              "INSERT INTO customer_appointment (customer_id, appointment_id, reminder) VALUES (?, ?, ?)";
-            con.query(
-              insertQuery,
-              [customer_id, appointment_id, reminder],
-              (insertErr, insertResult) => {
-                if (insertErr) {
-                  console.error("Error inserting appointment:", insertErr);
-                  res
-                    .status(500)
-                    .json({ error: "Error inserting appointment" });
-                  return;
-                }
-
-                // Appointment added successfully
-                res
-                  .status(201)
-                  .json({ message: "Appointment added successfully" });
+            // Get the next customer_appointment_id
+            const getNextIdQuery =
+              "SELECT MAX(customer_appointment_id) as maxId FROM customer_appointment";
+            con.query(getNextIdQuery, (maxIdErr, maxIdResult) => {
+              if (maxIdErr) {
+                console.error(
+                  "Error getting next customer appointment ID:",
+                  maxIdErr
+                );
+                res.status(500).json({
+                  error: "Error getting next customer appointment ID",
+                });
+                return;
               }
-            );
+
+              const nextId = maxIdResult[0].maxId + 1;
+
+              // Insert the new appointment in the customer_appointment table
+              const insertQuery =
+                "INSERT INTO customer_appointment (customer_appointment_id, customer_id, appointment_id, reminder, additionalInfo) VALUES (?, ?, ?, ?, ?)";
+              con.query(
+                insertQuery,
+                [nextId, customer_id, appointment_id, reminder, additionalInfo],
+                (insertErr, insertResult) => {
+                  if (insertErr) {
+                    console.error("Error inserting appointment:", insertErr);
+                    res
+                      .status(500)
+                      .json({ error: "Error inserting appointment" });
+                    return;
+                  }
+
+                  // Appointment added successfully
+                  res
+                    .status(200)
+                    .json({ message: "Appointment added successfully" });
+                }
+              );
+            });
           }
         );
       }
