@@ -11,11 +11,17 @@ const appointmentController = require("../controllers/appointController");
 
 // Route to handle the POST request for creating a new customer
 //router.post("/signIn", custumerController.signinCustomer);
-router.get("/:appointmentID/", appointmentController.getAppointment);
+
 router.get(
   "/availableAppointments",
   appointmentController.getAvailableAppointments
 );
+
+router.get(
+  "/occupiedAppointments",
+  appointmentController.getOccupiedAppointments
+);
+router.post("/makeAppointment", appointmentController.makeAppointment);
 router.get(
   "/futureAppointments/:customerID",
   appointmentController.getFutureAppointments
@@ -28,5 +34,6 @@ router.get(
   "/historyAppointments/:customerID",
   appointmentController.getHistoryAppointments
 );
+// router.get("/:appointmentID/", appointmentController.getAppointment);
 
 module.exports = router;
