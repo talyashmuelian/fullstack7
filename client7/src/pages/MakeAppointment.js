@@ -5,6 +5,7 @@ import "../css/MakeAppointment.css";
 const MakeAppointment = () => {
   const [futureQueues, setFutureQueues] = useState([]);
   const [selectedQueue, setSelectedQueue] = useState(null);
+  const [myFutureQueues, setMyFutureQueues] = useState([]);
   const [isRequestExchangeOpen, setIsRequestExchangeOpen] = useState(false);
   const [customer_id, setCustomer_id] = useState("");
   const [formData, setFormData] = useState({
@@ -14,9 +15,11 @@ const MakeAppointment = () => {
 
   // Fetch all future queues, both available and occupied, on component mount
   useEffect(() => {
+    var userID = JSON.parse(localStorage.getItem("currentUserID"));
+    setCustomer_id(userID); //(JSON.parse(localStorage.getItem("currentUserID")));
     fetchFutureQueues();
-
-    setCustomer_id(JSON.parse(localStorage.getItem("currentUserID")));
+    console.log(customer_id);
+    fetchMyFutureQueues();
   }, []);
 
   const fetchFutureQueues = async () => {
@@ -36,12 +39,24 @@ const MakeAppointment = () => {
       console.error("Error fetching future queues:", error);
     }
   };
+  const fetchMyFutureQueues = async () => {
+    console.log(customer_id);
+    try {
+      const response = await requestsGet(
+        `/appointments/futureAppointments/${customer_id}` //
+      ); // Replace with the appropriate API endpoint to fetch future queues
+      let data = await response.json();
+      setMyFutureQueues([data]);
+    } catch (error) {
+      console.error("Error fetching my future queues:", error);
+    }
+  };
 
   const handleQueueButtonClick = (queue) => {
     if (queue.isOccupied) {
       // Handle "Request a Replacement" button click
       setIsRequestExchangeOpen(true);
-      setSelectedQueue(queue);
+      //setSelectedQueue(queue);
     } else {
       // Handle "Call for a Queue" button click
       openAppointmentForm(queue);
@@ -53,6 +68,14 @@ const MakeAppointment = () => {
     setSelectedQueue(queue);
   };
 
+  const deleteObjectById = (idToDelete) => {
+    const updatedList = futureQueues.filter(
+      (obj) => obj.appointment_id !== idToDelete
+    );
+    setFutureQueues(updatedList);
+  };
+
+  //צריך לרוקן את הטופס אחרי השליחה
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     // Implement the logic to submit the form and make a POST request to add a row in the queue table
@@ -62,7 +85,11 @@ const MakeAppointment = () => {
         appointment_id: selectedQueue.appointment_id,
         ...formData,
       });
-      // Handle the response as needed
+      alert("Appointment added successfully!");
+      deleteObjectById(selectedQueue.appointment_id);
+      setSelectedQueue(null);
+
+      // Handle the response as neededs
       console.log("Appointment added successfully!", response);
     } catch (error) {
       console.error("Error adding appointment:", error);
@@ -141,9 +168,9 @@ const MakeAppointment = () => {
           <h2>Which queue do you wish to exchange with?</h2>
           {/* Display your queues for exchange */}
           {/* e.g., */}
-          {futureQueues.map((queue) => (
-            <div key={queue.id}>
-              <span>{queue.name}</span>
+          {myFutureQueues.map((queue) => (
+            <div key={queue.appointment_id}>
+              <span>{queue.date_time}</span>
               <button onClick={handleRequestExchangeSubmit}>
                 Confirm Exchange
               </button>

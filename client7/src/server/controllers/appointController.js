@@ -104,6 +104,45 @@ exports.getOccupiedAppointments = async (req, res) => {
   }
 };
 
+exports.getFutureAppointmentsForCus = async (req, res) => {
+  console.log("line108");
+  const customer_id = req.params.customerID;
+  console.log("line109");
+  console.log(customer_id);
+  try {
+    // Query to get future appointments for the given customer_id
+    const query =
+      "SELECT ca.customer_appointment_id, ca.customer_id, ca.appointment_id, ca.reminder, ca.additionalInfo, a.date_time " +
+      "FROM customer_appointment ca " +
+      "INNER JOIN appointments a ON ca.appointment_id = a.appointment_id " +
+      "WHERE ca.customer_id = ? AND a.date_time > NOW() " +
+      "ORDER BY a.date_time ASC";
+
+    // Execute the query with customer_id as a parameter
+    con.query(query, [customer_id], (err, result) => {
+      if (err) {
+        console.error("Error fetching future appointments:", err);
+        res.status(500).json({ error: "Error fetching future appointments" });
+        return;
+      }
+
+      // If no future appointments are found for the given customer_id, return an empty array
+      if (result.length === 0) {
+        res
+          .status(404)
+          .json({ error: "No future appointments found for the customer" });
+        return;
+      }
+
+      // Future appointments found, send them in the response
+      res.status(200).json(result); //{ futureAppointments: result }
+    });
+  } catch (error) {
+    console.error("Error processing request:", error);
+    res.status(500).json({ error: "Error processing request" });
+  }
+};
+
 exports.makeAppointment = async (req, res) => {
   const { customer_id, appointment_id, reminder, additionalInfo } = req.body;
 
