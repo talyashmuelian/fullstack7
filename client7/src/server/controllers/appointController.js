@@ -111,7 +111,7 @@ exports.makeAppointment = async (req, res) => {
     // Check if the appointment_id exists in the appointments table
     const checkAppointmentQuery =
       "SELECT * FROM appointments WHERE appointment_id = ?";
-    pool.query(
+    con.query(
       checkAppointmentQuery,
       [appointment_id],
       (checkAppErr, checkAppResult) => {
@@ -130,7 +130,7 @@ exports.makeAppointment = async (req, res) => {
         // Check if the appointment_id already exists for the given customer in customer_appointment table
         const checkCustomerAppointmentQuery =
           "SELECT * FROM customer_appointment WHERE customer_id = ? AND appointment_id = ?";
-        pool.query(
+        con.query(
           checkCustomerAppointmentQuery,
           [customer_id, appointment_id],
           (checkCustAppErr, checkCustAppResult) => {
@@ -156,7 +156,7 @@ exports.makeAppointment = async (req, res) => {
             // Insert the new appointment in the customer_appointment table
             const insertQuery =
               "INSERT INTO customer_appointment (customer_id, appointment_id, reminder) VALUES (?, ?, ?)";
-            pool.query(
+            con.query(
               insertQuery,
               [customer_id, appointment_id, reminder],
               (insertErr, insertResult) => {
