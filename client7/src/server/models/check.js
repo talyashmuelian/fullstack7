@@ -20,19 +20,19 @@ const schemaCustomer = Joi.object().keys({
   email: Joi.string().required(),
 });
 
-const schemaPosts = Joi.object().keys({
-  userId: Joi.number().required(),
-  id: Joi.number().required(),
-  title: Joi.string().required(),
-  body: Joi.string().required(),
+const schemaRequest = Joi.object().keys({
+  //sender_client_id, recipient_appointment_id, sender_appointment_id
+  sender_client_id: Joi.number().required(),
+  recipient_appointment_id: Joi.number().required(),
+  sender_appointment_id: Joi.number().required(),
 });
 
-const schemaComments = Joi.object().keys({
-  postId: Joi.number().required(),
-  id: Joi.number().required(),
-  name: Joi.string().required(),
-  email: Joi.string().required(), //.email().
-  body: Joi.string().required(),
+const schemaAppointment = Joi.object().keys({
+  //customer_id, appointment_id, reminder, additionalInfo
+  customer_id: Joi.number().required(),
+  appointment_id: Joi.number().required(),
+  reminder: Joi.number().required(),
+  additionalInfo: Joi.string().required(),
 });
 
 const schemaPasswords = Joi.object().keys({
@@ -45,8 +45,8 @@ const ObjectCheck = {
   identification_customers: schemaIdentification_customers,
   customer_information: schemaCustomer_information,
   customer: schemaCustomer,
-  posts: schemaPosts,
-  comments: schemaComments,
+  requests: schemaRequest,
+  appointments: schemaAppointment,
   passwords: schemaPasswords,
 };
 

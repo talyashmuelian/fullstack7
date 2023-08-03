@@ -107,14 +107,22 @@ const MakeAppointment = () => {
     // Implement the logic to submit the request exchange and make a POST request to add a row in the request table
     try {
       const response = await requestsPost("/requests/createRequest", {
-        //const response = await requestsPost("/appointments/createRequest", {
         sender_client_id: customer_id,
         recipient_appointment_id: selectedQueueForReplace.appointment_id,
         sender_appointment_id: queue.appointment_id,
       });
       // Handle the response as needed
-      console.log("Exchange request submitted!", response);
-      alert("Exchange request submitted successfully!");
+      if (response.status == 200) {
+        console.log("Exchange request submitted!", response);
+        alert("Exchange request submitted successfully!");
+      } else if (response.status == 201) {
+        console.log(
+          "The request already exists. Wait patiently for a reply",
+          response
+        );
+        alert("The request already exists. Wait patiently for a reply");
+      }
+
       setIsRequestExchangeOpen(false);
     } catch (error) {
       console.error("Error submitting exchange request:", error);

@@ -144,6 +144,13 @@ exports.getFutureAppointmentsForCus = async (req, res) => {
 };
 
 exports.makeAppointment = async (req, res) => {
+  const { error } = Check.check("appointments", req.body);
+  if (error) {
+    console.log(error.details[0].message);
+    res.status(400).send(error.details[0].message);
+    return;
+  }
+
   const { customer_id, appointment_id, reminder, additionalInfo } = req.body;
 
   try {
