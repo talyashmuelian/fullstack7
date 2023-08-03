@@ -5,9 +5,12 @@ import "../css/MakeAppointment.css";
 const MakeAppointment = () => {
   const [futureQueues, setFutureQueues] = useState([]);
   const [selectedQueue, setSelectedQueue] = useState(null);
+  const [selectedQueueForReplace, setSelectedQueueForReplace] = useState(null);
   const [myFutureQueues, setMyFutureQueues] = useState([]);
   const [isRequestExchangeOpen, setIsRequestExchangeOpen] = useState(false);
-  const [customer_id, setCustomer_id] = useState("");
+  const [customer_id, setCustomer_id] = useState(
+    JSON.parse(localStorage.getItem("currentUserID"))
+  );
   const [formData, setFormData] = useState({
     additionalInfo: "",
     reminder: 0,
@@ -15,12 +18,9 @@ const MakeAppointment = () => {
 
   // Fetch all future queues, both available and occupied, on component mount
   useEffect(() => {
-    var userID = JSON.parse(localStorage.getItem("currentUserID"));
-    setCustomer_id(userID); //(JSON.parse(localStorage.getItem("currentUserID")));
     fetchFutureQueues();
-    console.log(customer_id);
     fetchMyFutureQueues();
-  }, []);
+  }, [customer_id]);
 
   const fetchFutureQueues = async () => {
     try {
@@ -46,7 +46,8 @@ const MakeAppointment = () => {
         `/appointments/futureAppointments/${customer_id}` //
       ); // Replace with the appropriate API endpoint to fetch future queues
       let data = await response.json();
-      setMyFutureQueues([data]);
+
+      setMyFutureQueues([...data]);
     } catch (error) {
       console.error("Error fetching my future queues:", error);
     }
@@ -56,12 +57,18 @@ const MakeAppointment = () => {
     if (queue.isOccupied) {
       // Handle "Request a Replacement" button click
       setIsRequestExchangeOpen(true);
+      setSelectedQueueForReplace(queue);
       //setSelectedQueue(queue);
     } else {
       // Handle "Call for a Queue" button click
       openAppointmentForm(queue);
     }
   };
+
+  //   useEffect(() => {
+  //     // This will be triggered every time selectedQueueForReplace changes
+  //     console.log(selectedQueueForReplace);
+  //   }, [selectedQueueForReplace]);
 
   const openAppointmentForm = (queue) => {
     // Implement the logic to open the appointment form and set the selectedQueue state
@@ -96,15 +103,18 @@ const MakeAppointment = () => {
     }
   };
 
-  const handleRequestExchangeSubmit = async () => {
+  const handleRequestExchangeSubmit = async (queue) => {
     // Implement the logic to submit the request exchange and make a POST request to add a row in the request table
     try {
-      const response = await requestsPost("/request-exchange", {
-        queueId: selectedQueue.id,
-        selectedQueueId: formData.selectedQueueId,
+      const response = await requestsPost("/requests/createRequest", {
+        //const response = await requestsPost("/appointments/createRequest", {
+        sender_client_id: customer_id,
+        recipient_appointment_id: selectedQueueForReplace.appointment_id,
+        sender_appointment_id: queue.appointment_id,
       });
       // Handle the response as needed
       console.log("Exchange request submitted!", response);
+      alert("Exchange request submitted successfully!");
       setIsRequestExchangeOpen(false);
     } catch (error) {
       console.error("Error submitting exchange request:", error);
@@ -171,8 +181,8 @@ const MakeAppointment = () => {
           {myFutureQueues.map((queue) => (
             <div key={queue.appointment_id}>
               <span>{queue.date_time}</span>
-              <button onClick={handleRequestExchangeSubmit}>
-                Confirm Exchange
+              <button onClick={() => handleRequestExchangeSubmit(queue)}>
+                Submit an exchange request with this appointment
               </button>
             </div>
           ))}

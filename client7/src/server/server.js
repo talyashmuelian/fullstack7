@@ -2,6 +2,7 @@ const customerRouter = require("./routes/customerRouter");
 const adminRouter = require("./routes/adminRouter");
 const appointmentRouter = require("./routes/appointRouter");
 const paymentRouter = require("./routes/paymentRouter");
+const requestRouter = require("./routes/requestRouter");
 
 const express = require("express");
 const cors = require("cors");
@@ -16,6 +17,7 @@ app.use("/customers", customerRouter);
 app.use("/admin", adminRouter);
 app.use("/appointments", appointmentRouter);
 app.use("/payments", paymentRouter);
+app.use("/requests", requestRouter);
 
 // Start the server
 const PORT = 3001;

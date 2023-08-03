@@ -227,3 +227,9 @@ function insertData(connection, insertions, callback) {
     });
   }
 }
+
+///updates
+// ALTER TABLE requests
+// ADD COLUMN sender_appointment_id INT,
+// ADD CONSTRAINT fk_sender_appointment
+// FOREIGN KEY (sender_appointment_id) REFERENCES appointments(appointment_id);
