@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { requestsGet, requestsPost } from "../requestsFromServer.js";
+import {
+  requestsGet,
+  requestsPost,
+  requestsDelete,
+} from "../requestsFromServer.js";
 import "../css/History.css";
 
 const FutureAppointment = () => {
@@ -22,13 +26,20 @@ const FutureAppointment = () => {
   };
 
   // Function to cancel a queue
-  const cancelQueue = async (queueId) => {
-    // try {
-    //   await requestsPost(`/api/queues/${queueId}/cancel`); // Replace "/api/queues/${queueId}/cancel" with the actual endpoint for canceling a queue
-    //   fetchQueues(); // Fetch the updated list of queues after cancellation
-    // } catch (error) {
-    //   console.error("Error canceling queue:", error);
-    // }
+  const cancelQueue = async (appointment_id) => {
+    try {
+      const response = await requestsDelete(
+        `/appointments/cancelAppointment/${appointment_id}`
+      );
+
+      if (response.status == 200) {
+        console.log("Appointment canceled successfully", response);
+        alert("Appointment canceled successfully!");
+      }
+      fetchQueues(); // Fetch the updated list of queues after cancellation
+    } catch (error) {
+      console.error("Error canceling queue:", error);
+    }
   };
 
   // Fetch queues on component mount

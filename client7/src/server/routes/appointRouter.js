@@ -25,7 +25,10 @@ router.get(
   appointmentController.getOccupiedAppointments
 );
 router.post("/makeAppointment", appointmentController.makeAppointment);
-
+router.delete(
+  "/cancelAppointment/:appointment_id",
+  appointmentController.cancelAppointment
+);
 // router.get(
 //   "/allFutureAppointments",
 //   appointmentController.getAllFutureAppointments

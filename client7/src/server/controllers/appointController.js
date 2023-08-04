@@ -248,6 +248,59 @@ exports.makeAppointment = async (req, res) => {
   }
 };
 
+exports.cancelAppointment = async (req, res) => {
+  const appointment_id = req.params.appointment_id;
+
+  try {
+    // Check if the appointment_id exists in the customer_appointment table
+    const checkAppointmentQuery =
+      "SELECT appointment_id FROM customer_appointment WHERE appointment_id = ?";
+    con.query(
+      checkAppointmentQuery,
+      [appointment_id],
+      (checkAppointmentErr, checkAppointmentResult) => {
+        if (checkAppointmentErr) {
+          console.error("Error checking appointment:", checkAppointmentErr);
+          res.status(500).json({ error: "Error checking appointment" });
+          return;
+        }
+
+        // If appointment_id doesn't exist, return an error
+        if (checkAppointmentResult.length === 0) {
+          res.status(404).json({ error: "Appointment not found" });
+          return;
+        }
+
+        // Delete the row from the customer_appointment table
+        const deleteAppointmentQuery =
+          "DELETE FROM customer_appointment WHERE appointment_id = ?";
+        con.query(
+          deleteAppointmentQuery,
+          [appointment_id],
+          (deleteAppointmentErr, deleteAppointmentResult) => {
+            if (deleteAppointmentErr) {
+              console.error(
+                "Error deleting appointment:",
+                deleteAppointmentErr
+              );
+              res.status(500).json({ error: "Error deleting appointment" });
+              return;
+            }
+
+            // Appointment deleted successfully
+            res
+              .status(200)
+              .json({ message: "Appointment canceled successfully" });
+          }
+        );
+      }
+    );
+  } catch (error) {
+    console.error("Error processing request:", error);
+    res.status(500).json({ error: "Error processing request" });
+  }
+};
+
 exports.getFutureAppointments = async (req, res) => {
   // console.log("hi");
   // const { username, password } = req.query;
