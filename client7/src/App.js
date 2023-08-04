@@ -7,6 +7,8 @@ import Signin from "./pages/Signin";
 import LoginAdmin from "./pages/LoginAdmin";
 import HomeClients from "./pages/HomeClients";
 import MakeAppointment from "./pages/MakeAppointment";
+import History from "./pages/History";
+import FutureAppointment from "./pages/FutureAppointment";
 
 function App() {
   return (
@@ -23,8 +25,11 @@ function App() {
             path=":id/Appointments/MakeAppointment"
             element={<MakeAppointment />}
           />
-          <Route path=":id/Appointments/History" element={<Login />} />
-          <Route path=":id/Appointments/Future" element={<Login />} />
+          <Route path=":id/Appointments/History" element={<History />} />
+          <Route
+            path=":id/Appointments/Future"
+            element={<FutureAppointment />}
+          />
           <Route path=":id/Payments" element={<Login />} />
 
           <Route path=":id/Messages" element={<Login />} />

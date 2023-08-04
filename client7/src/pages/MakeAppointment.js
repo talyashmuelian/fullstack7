@@ -121,6 +121,10 @@ const MakeAppointment = () => {
           response
         );
         alert("The request already exists. Wait patiently for a reply");
+      } else if (response.status == 400) {
+        alert(
+          "This appointment belongs to you. You cannot ask for a replacement yourself"
+        );
       }
 
       setIsRequestExchangeOpen(false);

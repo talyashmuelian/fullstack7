@@ -1,0 +1,63 @@
+/* History.css */
+
+.history-container {
+    font-family: Arial, sans-serif;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .history-container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+  }
+  
+  .queue-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .queue-row:last-child {
+    border-bottom: none;
+  }
+  
+  .queue-row span {
+    flex-basis: 33.33%;
+    color: #333;
+  }
+  
+  .queue-row button {
+    background-color: #e91e63;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .queue-row button:hover {
+    background-color: #c2185b;
+  }
+  
+  /* Optional: Add some responsive styles */
+  @media (max-width: 480px) {
+    .queue-row {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 10px;
+    }
+  
+    .queue-row span {
+      flex-basis: 100%;
+      margin-bottom: 5px;
+    }
+  }
+  
