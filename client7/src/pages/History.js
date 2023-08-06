@@ -14,7 +14,7 @@ const History = () => {
 
   const fetchHistoryData = async () => {
     try {
-      // Assuming requestsGet function returns an array of queue objects with appointment_id and date_time properties
+      // Assuming requests Get function returns an array of queue objects with appointment_id and date_time properties
       const response = await requestsGet(
         `/appointments/history/${customer_id}`
       );
@@ -29,14 +29,18 @@ const History = () => {
     <div className="history-container">
       <h2>History</h2>
       <div className="history-list">
-        {historyData.map((queue) => (
-          <div key={queue.appointment_id} className="history-item">
-            <span className="queue-id">
-              appointment ID: {queue.appointment_id}{" "}
-            </span>
-            <span className="queue-date">Date: {queue.date_time}</span>
-          </div>
-        ))}
+        {historyData.length === 0 ? (
+          <div className="no-history">No history</div>
+        ) : (
+          historyData.map((queue) => (
+            <div key={queue.appointment_id} className="history-item">
+              <span className="queue-id">
+                appointment ID: {queue.appointment_id}{" "}
+              </span>
+              <span className="queue-date">Date: {queue.date_time}</span>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
