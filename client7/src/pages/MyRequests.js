@@ -17,7 +17,8 @@ const MyRequests = () => {
       // Assuming requests Get function returns an array of queue objects with appointment_id and date_time properties
       const response = await requestsGet(`/requests/myRequests/${customer_id}`);
       let data = await response.json();
-      setRequestsList(data);
+      let data1 = data.requests;
+      setRequestsList(data1);
     } catch (error) {
       console.error("Error fetching requests: ", error);
     }
@@ -39,14 +40,14 @@ const MyRequests = () => {
       ) : (
         requestsList.map((request) => (
           <div key={request.id} className="request-item">
-            {/* <div className="request-details">
+            <div className="request-details">
               <span className="sender-datetime">
-                Sender: {request.sender_date_time}
+                Your: {request.sender_date_time}
               </span>
               <span className="your-datetime">
-                You: {request.your_date_time}
+                Recipient: {request.recipient_date_time}
               </span>
-            </div> */}
+            </div>
           </div>
         ))
       )}

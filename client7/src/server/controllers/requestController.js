@@ -302,6 +302,76 @@ exports.deleteRequest = async (req, res) => {
 
 exports.getMyRequests = async (req, res) => {
   const customer_id = req.params.customer_id;
+
+  try {
+    // Get requests for the given customer_id
+    const getRequestsQuery =
+      "SELECT request_id, sender_appointment_id, recipient_appointment_id FROM requests WHERE sender_client_id = ?";
+    con.query(
+      getRequestsQuery,
+      [customer_id],
+      async (getRequestsErr, getRequestsResult) => {
+        if (getRequestsErr) {
+          console.error("Error getting requests:", getRequestsErr);
+          res.status(500).json({ error: "Error getting requests" });
+          return;
+        }
+
+        // Create an array to store the request objects with appointment details
+        const requestObjects = [];
+
+        // Helper function to get the appointment date_time for a given appointment_id
+        const getAppointmentDateTime = (appointment_id) => {
+          const getAppointmentQuery =
+            "SELECT date_time FROM appointments WHERE appointment_id = ?";
+          return new Promise((resolve, reject) => {
+            con.query(
+              getAppointmentQuery,
+              [appointment_id],
+              (getAppointmentErr, getAppointmentResult) => {
+                if (getAppointmentErr) {
+                  reject(getAppointmentErr);
+                } else {
+                  resolve(
+                    getAppointmentResult.length > 0
+                      ? getAppointmentResult[0].date_time
+                      : null
+                  );
+                }
+              }
+            );
+          });
+        };
+
+        // Loop through each request to get appointment details
+        for (const request of getRequestsResult) {
+          const sender_date_time = await getAppointmentDateTime(
+            request.sender_appointment_id
+          );
+          const recipient_date_time = await getAppointmentDateTime(
+            request.recipient_appointment_id
+          );
+
+          // Create the request object with appointment details
+          const requestObject = {
+            request_id: request.request_id,
+            sender_appointment_id: request.sender_appointment_id,
+            sender_date_time: sender_date_time,
+            recipient_appointment_id: request.recipient_appointment_id,
+            recipient_date_time: recipient_date_time,
+          };
+
+          requestObjects.push(requestObject);
+        }
+
+        // All request objects with appointment details are ready
+        res.status(200).json({ requests: requestObjects });
+      }
+    );
+  } catch (error) {
+    console.error("Error processing request:", error);
+    res.status(500).json({ error: "Error processing request" });
+  }
 };
 
 // exports.postCreateNewRequest = async (req, res) => {
