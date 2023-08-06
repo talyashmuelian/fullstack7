@@ -29,6 +29,10 @@ router.delete(
   "/cancelAppointment/:appointment_id",
   appointmentController.cancelAppointment
 );
+router.get(
+  "/history/:customer_id",
+  appointmentController.getHistoryAppointmentsForCus
+);
 // router.get(
 //   "/allFutureAppointments",
 //   appointmentController.getAllFutureAppointments

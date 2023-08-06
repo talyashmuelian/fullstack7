@@ -31,7 +31,6 @@ const FutureAppointment = () => {
       const response = await requestsDelete(
         `/appointments/cancelAppointment/${appointment_id}`
       );
-
       if (response.status == 200) {
         console.log("Appointment canceled successfully", response);
         alert("Appointment canceled successfully!");
