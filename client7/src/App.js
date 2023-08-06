@@ -10,6 +10,7 @@ import MakeAppointment from "./pages/MakeAppointment";
 import History from "./pages/History";
 import FutureAppointment from "./pages/FutureAppointment";
 import MyRequests from "./pages/MyRequests";
+import RequestsForMe from "./pages/RequestsForMe";
 
 function App() {
   return (
@@ -37,7 +38,10 @@ function App() {
 
           <Route path=":id/Requests/MyRequests" element={<MyRequests />} />
 
-          <Route path=":id/Requests/RequestsForMe" element={<Login />} />
+          <Route
+            path=":id/Requests/RequestsForMe"
+            element={<RequestsForMe />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

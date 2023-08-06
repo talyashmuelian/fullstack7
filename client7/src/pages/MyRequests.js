@@ -4,17 +4,24 @@ import "../css/MyRequests.css";
 
 const MyRequests = () => {
   const [requestsList, setRequestsList] = useState([]);
+  const [customer_id, setCustomer_id] = useState(
+    JSON.parse(localStorage.getItem("currentUserID"))
+  );
 
   useEffect(() => {
-    // Make a GET request to fetch the requests from the server
-    requestsGet()
-      .then((response) => {
-        setRequestsList(response.data); // Assuming the data received is an array of requests
-      })
-      .catch((error) => {
-        console.error("Error fetching requests: ", error);
-      });
+    fetchRequestsData();
   }, []);
+
+  const fetchRequestsData = async () => {
+    try {
+      // Assuming requests Get function returns an array of queue objects with appointment_id and date_time properties
+      const response = await requestsGet(`/requests/myRequests/${customer_id}`);
+      let data = await response.json();
+      setRequestsList(data);
+    } catch (error) {
+      console.error("Error fetching requests: ", error);
+    }
+  };
 
   const handleReplacementRequest = (request) => {
     // Assuming you have functions for making PUT and DELETE requests to the server
@@ -32,20 +39,14 @@ const MyRequests = () => {
       ) : (
         requestsList.map((request) => (
           <div key={request.id} className="request-item">
-            <div className="request-details">
+            {/* <div className="request-details">
               <span className="sender-datetime">
                 Sender: {request.sender_date_time}
               </span>
               <span className="your-datetime">
                 You: {request.your_date_time}
               </span>
-            </div>
-            <button
-              className="replacement-button"
-              onClick={() => handleReplacementRequest(request)}
-            >
-              Confirm replacement?
-            </button>
+            </div> */}
           </div>
         ))
       )}

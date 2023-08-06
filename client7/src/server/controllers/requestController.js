@@ -170,6 +170,140 @@ exports.postCreateNewRequest = async (req, res) => {
   }
 };
 
+exports.getRequestsForMe = async (req, res) => {
+  const customer_id = req.params.customer_id;
+
+  try {
+    // Get requests for the given customer_id
+    const getRequestsQuery =
+      "SELECT request_id, sender_client_id, recipient_client_id, recipient_appointment_id, sender_appointment_id FROM requests WHERE recipient_client_id = ?";
+    con.query(
+      getRequestsQuery,
+      [customer_id],
+      (getRequestsErr, getRequestsResult) => {
+        if (getRequestsErr) {
+          console.error("Error getting requests:", getRequestsErr);
+          res.status(500).json({ error: "Error getting requests" });
+          return;
+        }
+
+        // Create an array to store the request objects with appointment details
+        const requestObjects = [];
+
+        // Helper function to get the appointment date_time for a given appointment_id
+        const getAppointmentDateTime = (appointment_id) => {
+          return new Promise((resolve, reject) => {
+            const getAppointmentQuery =
+              "SELECT date_time FROM appointments WHERE appointment_id = ?";
+            con.query(
+              getAppointmentQuery,
+              [appointment_id],
+              (getAppointmentErr, getAppointmentResult) => {
+                if (getAppointmentErr) {
+                  reject(getAppointmentErr);
+                } else {
+                  resolve(
+                    getAppointmentResult.length > 0
+                      ? getAppointmentResult[0].date_time
+                      : null
+                  );
+                }
+              }
+            );
+          });
+        };
+
+        // Loop through each request to get appointment details
+        Promise.all(
+          getRequestsResult.map(async (request) => {
+            const sender_date_time = await getAppointmentDateTime(
+              request.sender_appointment_id
+            );
+            const recipient_date_time = await getAppointmentDateTime(
+              request.recipient_appointment_id
+            );
+
+            // Create the request object with appointment details
+            const requestObject = {
+              request_id: request.request_id,
+              sender_appointment_id: request.sender_appointment_id,
+              sender_date_time: sender_date_time,
+              recipient_appointment_id: request.recipient_appointment_id,
+              recipient_date_time: recipient_date_time,
+            };
+
+            requestObjects.push(requestObject);
+          })
+        )
+          .then(() => {
+            // All request objects with appointment details are ready
+            res.status(200).json({ requests: requestObjects });
+          })
+          .catch((error) => {
+            console.error("Error processing requests:", error);
+            res.status(500).json({ error: "Error processing requests" });
+          });
+      }
+    );
+  } catch (error) {
+    console.error("Error processing request:", error);
+    res.status(500).json({ error: "Error processing request" });
+  }
+};
+
+exports.deleteRequest = async (req, res) => {
+  const request_id = req.params.request_id;
+
+  try {
+    // Check if the request_id exists in the requests table
+    const checkRequestQuery =
+      "SELECT request_id FROM requests WHERE request_id = ?";
+    con.query(
+      checkRequestQuery,
+      [request_id],
+      (checkRequestErr, checkRequestResult) => {
+        if (checkRequestErr) {
+          console.error("Error checking request:", checkRequestErr);
+          res.status(500).json({ error: "Error checking request" });
+          return;
+        }
+
+        // If request_id doesn't exist, return an error
+        if (checkRequestResult.length === 0) {
+          res.status(404).json({ error: "Request not found" });
+          return;
+        }
+
+        // Delete the row from the requests table
+        const deleteRequestQuery = "DELETE FROM requests WHERE request_id = ?";
+        con.query(
+          deleteRequestQuery,
+          [request_id],
+          (deleteRequestErr, deleteRequestResult) => {
+            if (deleteRequestErr) {
+              console.error("Error deleting request:", deleteRequestErr);
+              res.status(500).json({ error: "Error deleting request" });
+              return;
+            }
+
+            // Request deleted successfully
+            res
+              .status(200)
+              .json({ message: "Request deleted successfully", status: 200 });
+          }
+        );
+      }
+    );
+  } catch (error) {
+    console.error("Error processing request:", error);
+    res.status(500).json({ error: "Error processing request" });
+  }
+};
+
+exports.getMyRequests = async (req, res) => {
+  const customer_id = req.params.customer_id;
+};
+
 // exports.postCreateNewRequest = async (req, res) => {
 //   const { error } = Check.check("requests", req.body);
 //   if (error) {

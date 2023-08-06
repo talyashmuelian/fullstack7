@@ -33,6 +33,10 @@ router.get(
   "/history/:customer_id",
   appointmentController.getHistoryAppointmentsForCus
 );
+router.put(
+  "/replaceAppointment/:sender_appointment_id/:recipient_appointment_id",
+  appointmentController.putReplaceAppointment
+);
 // router.get(
 //   "/allFutureAppointments",
 //   appointmentController.getAllFutureAppointments
