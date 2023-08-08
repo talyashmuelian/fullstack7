@@ -56,7 +56,7 @@ const HomeClients = () => {
             <Link to={`/Users/${userID}/Messages`}>Messages</Link>
           </li>
           <li>
-            <Link>Requests</Link>
+            <Link>Replacement Requests</Link>
             <ul className="sub-menu">
               <li>
                 <Link to={`/Users/${userID}/Requests/MyRequests`}>

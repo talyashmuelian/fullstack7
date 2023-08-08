@@ -11,6 +11,8 @@ import History from "./pages/History";
 import FutureAppointment from "./pages/FutureAppointment";
 import MyRequests from "./pages/MyRequests";
 import RequestsForMe from "./pages/RequestsForMe";
+import HomeAdmin from "./pages/HomeAdmin";
+import CreateAppointments from "./pages/CreateAppointments";
 
 function App() {
   return (
@@ -21,6 +23,18 @@ function App() {
         <Route path="/Signin" element={<Signin />} />
         <Route path="/LoginAdmin" element={<LoginAdmin />} />
         <Route path="/HomeClients" element={<HomeClients />} />
+        <Route path="/HomeAdmin" element={<HomeAdmin />} />
+        <Route path="Admin" element={<HomeAdmin />}>
+          <Route
+            path=":id/Appointments/CreateAppointments"
+            element={<CreateAppointments />}
+          />
+          <Route
+            path=":id/Appointments/FutureAppointments"
+            element={<LoginAdmin />}
+          />
+          <Route path=":id/Payments" element={<LoginAdmin />} />
+        </Route>
         <Route path="Users" element={<HomeClients />}>
           <Route path=":id/Home" index />
           <Route

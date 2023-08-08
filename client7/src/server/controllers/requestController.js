@@ -2,6 +2,7 @@ const con = require("../config/database");
 var Check = require("../models/check");
 
 exports.postCreateNewRequest = async (req, res) => {
+  ///צריך ךמחוק את ההכנסה של המזהים של הלקוחות
   const { sender_client_id, recipient_appointment_id, sender_appointment_id } =
     req.body;
 
@@ -176,7 +177,11 @@ exports.getRequestsForMe = async (req, res) => {
   try {
     // Get requests for the given customer_id
     const getRequestsQuery =
-      "SELECT request_id, sender_client_id, recipient_client_id, recipient_appointment_id, sender_appointment_id FROM requests WHERE recipient_client_id = ?";
+      //"SELECT request_id, sender_client_id, recipient_client_id, recipient_appointment_id, sender_appointment_id FROM requests WHERE recipient_client_id = ?";
+      "SELECT request_id, recipient_appointment_id, sender_appointment_id" +
+      " FROM requests ,customer_appointment" +
+      " WHERE recipient_appointment_id = appointment_id and customer_id=?";
+
     con.query(
       getRequestsQuery,
       [customer_id],

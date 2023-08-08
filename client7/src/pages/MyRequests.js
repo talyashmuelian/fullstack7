@@ -24,15 +24,6 @@ const MyRequests = () => {
     }
   };
 
-  const handleReplacementRequest = (request) => {
-    // Assuming you have functions for making PUT and DELETE requests to the server
-    // Make a PUT request to update the customer_appointment
-    // Make a DELETE request to delete the request from the server
-    // You can implement these functions in the "../requestsFromServer.js" file
-    // and call them here to update and delete the request.
-    console.log("Replacement request clicked for: ", request);
-  };
-
   return (
     <div className="my-requests-container">
       {requestsList.length === 0 ? (
