@@ -46,21 +46,16 @@ exports.loginAdmin = async (req, res) => {
   });
 };
 
-// exports.createAppointments = async (req, res) => {
-//   // const { error } = Check.check("createAppointments", req.body);
-//   // if (error) {
-//   //   console.log(error.details[0].message);
-//   //   res.status(400).send(error.details[0].message);
-//   //   return;
-//   // }
-
-//   const appointments = req.body;
-
-// }
-
 exports.createAppointments = async (req, res) => {
   const appointments = req.body.appointments;
   console.log(appointments);
+
+  // const { error } = Check.check("createAppointments", req.body.appointments);
+  // if (error) {
+  //   console.log(error.details[0].message);
+  //   res.status(400).send(error.details[0].message);
+  //   return;
+  // }
 
   try {
     // Loop through each appointment and insert if it doesn't exist
@@ -126,200 +121,56 @@ async function checkAppointmentExist(date_time) {
   });
 }
 
-// exports.createAppointments = async (req, res) => {
-//   const appointments = req.body.appointments;
-//   console.log(appointments);
+exports.AdminFutureAppointments = async (req, res) => {
+  try {
+    const getFutureAppointmentsQuery = `
+      SELECT 
+        a.date_time,
+        ca.customer_id,
+        ca.additionalInfo,
+        ci.name,
+        ci.id_number,
+        ci.phone,
+        ci.email
+      FROM appointments a
+      LEFT JOIN customer_appointment ca ON a.appointment_id = ca.appointment_id
+      LEFT JOIN customer_information ci ON ca.customer_id = ci.customer_id
+    `;
 
-//   try {
-//     // Get the latest appointment_id from the appointments table
-//     const getLastAppointmentIdQuery =
-//       "SELECT MAX(appointment_id) AS max_id FROM appointments";
-//     con.query(
-//       getLastAppointmentIdQuery,
-//       (getLastAppointmentIdErr, getLastAppointmentIdResult) => {
-//         if (getLastAppointmentIdErr) {
-//           console.error(
-//             "Error getting last appointment_id:",
-//             getLastAppointmentIdErr
-//           );
-//           res.status(500).json({ error: "Error getting last appointment_id" });
-//           return;
-//         }
+    con.query(getFutureAppointmentsQuery, (queryErr, queryResult) => {
+      if (queryErr) {
+        console.error("Error fetching future appointments:", queryErr);
+        res.status(500).json({ error: "Error fetching future appointments" });
+        return;
+      }
 
-//         const lastAppointmentId = getLastAppointmentIdResult[0].max_id || 0;
-//         let newAppointmentId = lastAppointmentId + 1;
+      const futureAppointments = queryResult.map((row) => {
+        const appointment = {
+          date_time: row.date_time,
+          name: null,
+          id_number: null,
+          phone: null,
+          email: null,
+          additionalInfo: null,
+          isOccupied: false,
+        };
 
-//         // Helper function to check if an appointment with the same date_time exists
-//         const doesAppointmentExist = (date_time) => {
-//           return new Promise((resolve, reject) => {
-//             const checkAppointmentQuery =
-//               "SELECT COUNT(*) AS count FROM appointments WHERE date_time = ?";
-//             con.query(
-//               checkAppointmentQuery,
-//               [date_time],
-//               (checkAppointmentErr, checkAppointmentResult) => {
-//                 if (checkAppointmentErr) {
-//                   reject(checkAppointmentErr);
-//                 } else {
-//                   resolve(checkAppointmentResult[0].count > 0);
-//                 }
-//               }
-//             );
-//           });
-//         };
+        if (row.customer_id) {
+          appointment.name = row.name;
+          appointment.id_number = row.id_number;
+          appointment.phone = row.phone;
+          appointment.email = row.email;
+          appointment.additionalInfo = row.additionalInfo;
+          appointment.isOccupied = true;
+        }
 
-//         // Loop through each appointment and insert if it doesn't exist
-//         const insertPromises = [];
-//         for (const appointment of appointments) {
-//           const formattedDateTime = new Date(appointment)
-//             .toISOString()
-//             .slice(0, 19)
-//             .replace("T", " ");
+        return appointment;
+      });
 
-//           doesAppointmentExist(formattedDateTime)
-//             .then((appointmentExists) => {
-//               if (!appointmentExists) {
-//                 const insertAppointmentQuery =
-//                   "INSERT INTO appointments (appointment_id, date_time) VALUES (?, ?)";
-//                 const insertPromise = new Promise((resolve, reject) => {
-//                   con.query(
-//                     insertAppointmentQuery,
-//                     [newAppointmentId, formattedDateTime],
-//                     (insertAppointmentErr, insertAppointmentResult) => {
-//                       if (insertAppointmentErr) {
-//                         reject(insertAppointmentErr);
-//                       } else {
-//                         resolve();
-//                       }
-//                     }
-//                   );
-//                 });
-//                 insertPromises.push(insertPromise);
-//               }
-//             })
-//             .catch((error) => {
-//               console.error("Error checking appointment existence:", error);
-//               res
-//                 .status(500)
-//                 .json({ error: "Error checking appointment existence" });
-//             });
-
-//           newAppointmentId++; // Increment ID here
-//         }
-
-//         Promise.all(insertPromises)
-//           .then(() => {
-//             res.status(200).json({
-//               message: "Appointments created successfully",
-//               status: 200,
-//             });
-//           })
-//           .catch((error) => {
-//             console.error("Error inserting appointments:", error);
-//             res.status(500).json({ error: "Error inserting appointments" });
-//           });
-//       }
-//     );
-//   } catch (error) {
-//     console.error("Error processing request:", error);
-//     res.status(500).json({ error: "Error processing request" });
-//   }
-// };
-
-// exports.createAppointments = async (req, res) => {
-//   const appointments = req.body.appointments;
-//   console.log(appointments);
-//   try {
-//     // Get the latest appointment_id from the appointments table
-//     const getLastAppointmentIdQuery =
-//       "SELECT MAX(appointment_id) AS max_id FROM appointments";
-//     con.query(
-//       getLastAppointmentIdQuery,
-//       (getLastAppointmentIdErr, getLastAppointmentIdResult) => {
-//         if (getLastAppointmentIdErr) {
-//           console.error(
-//             "Error getting last appointment_id:",
-//             getLastAppointmentIdErr
-//           );
-//           res.status(500).json({ error: "Error getting last appointment_id" });
-//           return;
-//         }
-
-//         const lastAppointmentId = getLastAppointmentIdResult[0].max_id || 0;
-//         let newAppointmentId = lastAppointmentId + 1;
-
-//         // Helper function to check if an appointment with the same date_time exists
-//         const doesAppointmentExist = (date_time) => {
-//           return new Promise((resolve, reject) => {
-//             const checkAppointmentQuery =
-//               "SELECT COUNT(*) AS count FROM appointments WHERE date_time = ?";
-//             con.query(
-//               checkAppointmentQuery,
-//               [date_time],
-//               (checkAppointmentErr, checkAppointmentResult) => {
-//                 if (checkAppointmentErr) {
-//                   reject(checkAppointmentErr);
-//                 } else {
-//                   resolve(checkAppointmentResult[0].count > 0);
-//                 }
-//               }
-//             );
-//           });
-//         };
-
-//         // Loop through each appointment and insert if it doesn't exist
-//         const insertPromises = [];
-//         for (const appointment of appointments) {
-//           const formattedDateTime = new Date(appointment)
-//             .toISOString()
-//             .slice(0, 19)
-//             .replace("T", " ");
-
-//           doesAppointmentExist(formattedDateTime)
-//             .then((appointmentExists) => {
-//               if (!appointmentExists) {
-//                 const insertAppointmentQuery =
-//                   "INSERT INTO appointments (appointment_id, date_time) VALUES (?, ?)";
-//                 const insertPromise = new Promise((resolve, reject) => {
-//                   con.query(
-//                     insertAppointmentQuery,
-//                     [newAppointmentId, formattedDateTime],
-//                     (insertAppointmentErr, insertAppointmentResult) => {
-//                       if (insertAppointmentErr) {
-//                         reject(insertAppointmentErr);
-//                       } else {
-//                         newAppointmentId++;
-//                         resolve();
-//                       }
-//                     }
-//                   );
-//                 });
-//                 insertPromises.push(insertPromise);
-//               }
-//             })
-//             .catch((error) => {
-//               console.error("Error checking appointment existence:", error);
-//               res
-//                 .status(500)
-//                 .json({ error: "Error checking appointment existence" });
-//             });
-//         }
-
-//         Promise.all(insertPromises)
-//           .then(() => {
-//             res.status(200).json({
-//               message: "Appointments created successfully",
-//               status: 200,
-//             });
-//           })
-//           .catch((error) => {
-//             console.error("Error inserting appointments:", error);
-//             res.status(500).json({ error: "Error inserting appointments" });
-//           });
-//       }
-//     );
-//   } catch (error) {
-//     console.error("Error processing request:", error);
-//     res.status(500).json({ error: "Error processing request" });
-//   }
-// };
+      res.status(200).json({ futureAppointments });
+    });
+  } catch (error) {
+    console.error("Error processing request:", error);
+    res.status(500).json({ error: "Error processing request" });
+  }
+};

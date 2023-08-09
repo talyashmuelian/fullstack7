@@ -13,6 +13,7 @@ import MyRequests from "./pages/MyRequests";
 import RequestsForMe from "./pages/RequestsForMe";
 import HomeAdmin from "./pages/HomeAdmin";
 import CreateAppointments from "./pages/CreateAppointments";
+import AdminFutureAppointments from "./pages/adminFutureAppointments";
 
 function App() {
   return (
@@ -30,8 +31,8 @@ function App() {
             element={<CreateAppointments />}
           />
           <Route
-            path=":id/Appointments/FutureAppointments"
-            element={<LoginAdmin />}
+            path=":id/Appointments/adminFutureAppointments"
+            element={<AdminFutureAppointments />}
           />
           <Route path=":id/Payments" element={<LoginAdmin />} />
         </Route>

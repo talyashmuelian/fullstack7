@@ -39,7 +39,9 @@ const HomeAdmin = () => {
               </li>
 
               <li>
-                <Link to={`/Admin/${userID}/Appointments/FutureAppointments`}>
+                <Link
+                  to={`/Admin/${userID}/Appointments/adminFutureAppointments`}
+                >
                   Future Appointments
                 </Link>
               </li>
