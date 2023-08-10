@@ -5,19 +5,6 @@ import { requestsGet } from "../requestsFromServer.js";
 import { useNavigate, NavLink } from "react-router-dom";
 import Modal from "./Modal";
 
-// function Modal({ message, onClose }) {
-//   return (
-//     <div className="modal">
-//       <div className="modal-content">
-//         <span className="close" onClick={onClose}>
-//           &times;
-//         </span>
-//         <p>{message}</p>
-//       </div>
-//     </div>
-//   );
-// }
-
 const Login = () => {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({});

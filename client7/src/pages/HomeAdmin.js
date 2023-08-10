@@ -12,7 +12,7 @@ const HomeAdmin = () => {
 
   useEffect(async () => {
     if (!userID) {
-      navigate("/Login");
+      navigate("/LoginAdmin");
     }
     // const response = await requestsGet(`/customer/${userID}/info`);
     // let data = await response.json();

@@ -78,7 +78,7 @@ const AdminPayments = () => {
 
   const handleDeleteVoucher = async (voucherId) => {
     try {
-      const response = await requestsDelete(`/payments/vouchers/${voucherId}`); // Adjust the API endpoint
+      const response = await requestsDelete(`/admin/vouchers/${voucherId}`); // Adjust the API endpoint
       if (response.status === 204) {
         setVouchers((prevVouchers) =>
           prevVouchers.filter((voucher) => voucher.voucher_id !== voucherId)

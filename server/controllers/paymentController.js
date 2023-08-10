@@ -282,12 +282,10 @@ exports.pay = async (req, res) => {
 
 exports.deleteVoucher = async (req, res) => {
   // const { voucherId } = req.params;
-
   // try {
   //   const deleteQuery =
   //     "DELETE FROM payment_vouchers WHERE voucher_id = $1 RETURNING *";
   //   const { rowCount } = await con.query(deleteQuery, [voucherId]);
-
   //   if (rowCount === 0) {
   //     res.status(404).json({ error: "Voucher not found." });
   //   } else {
@@ -300,11 +298,9 @@ exports.deleteVoucher = async (req, res) => {
   //     .json({ error: "An error occurred while deleting the voucher." });
   // }
   // const { voucherId } = req.params;
-
   // try {
   //   const deleteQuery = 'DELETE FROM payment_vouchers WHERE voucher_id = ?';
   //   const [result] = await con.query(deleteQuery, [voucherId]);
-
   //   if (result.affectedRows === 0) {
   //     res.status(404).json({ error: 'Voucher not found.' });
   //   } else {
@@ -314,22 +310,4 @@ exports.deleteVoucher = async (req, res) => {
   //   console.error('Error deleting voucher:', error);
   //   res.status(500).json({ error: 'An error occurred while deleting the voucher.' });
   // }
-
-  exports.deleteVoucher = (req, res) => {
-    const { voucherId } = req.params;
-
-    const deleteQuery = "DELETE FROM payment_vouchers WHERE voucher_id = ?";
-    con.query(deleteQuery, [voucherId], (error, result) => {
-      if (error) {
-        console.error("Error deleting voucher:", error);
-        res
-          .status(500)
-          .json({ error: "An error occurred while deleting the voucher." });
-      } else if (result.affectedRows === 0) {
-        res.status(404).json({ error: "Voucher not found." });
-      } else {
-        res.status(204).send();
-      }
-    });
-  };
 };

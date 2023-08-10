@@ -140,7 +140,6 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-
 exports.getAllVouchers = async (req, res) => {
   try {
     const getVouchersQuery = "SELECT * FROM payment_vouchers";
@@ -212,4 +211,21 @@ exports.AdminFutureAppointments = async (req, res) => {
     console.error("Error processing request:", error);
     res.status(500).json({ error: "Error processing request" });
   }
+};
+exports.deleteVoucher = (req, res) => {
+  const { voucherId } = req.params;
+
+  const deleteQuery = "DELETE FROM payment_vouchers WHERE voucher_id = ?";
+  con.query(deleteQuery, [voucherId], (error, result) => {
+    if (error) {
+      console.error("Error deleting voucher:", error);
+      res
+        .status(500)
+        .json({ error: "An error occurred while deleting the voucher." });
+    } else if (result.affectedRows === 0) {
+      res.status(404).json({ error: "Voucher not found." });
+    } else {
+      res.status(204).send();
+    }
+  });
 };

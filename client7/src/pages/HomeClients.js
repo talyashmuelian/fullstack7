@@ -1,7 +1,7 @@
 import { Outlet, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { requestsGet } from "../requestsFromServer.js";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, Navigate } from "react-router-dom";
 
 import "../css/HomeClients.css"; // Styles for the redesigned component
 
@@ -11,15 +11,16 @@ const HomeClients = () => {
   var userID = JSON.parse(localStorage.getItem("currentUserID"));
 
   useEffect(async () => {
-    if (!userID) {
-      navigate("/Login");
-    }
-
+    // if (!userID) {
+    //   navigate("/Login");
+    // }
     // const response = await requestsGet(`/customer/${userID}/info`);
     // let data = await response.json();
     // setUser(data.name);
   }, []);
-
+  if (!userID) {
+    return <Navigate to="/Login" />;
+  }
   return (
     <div className="users-container">
       <h1 className="user-name">Hello, {user.name}</h1>
@@ -28,6 +29,7 @@ const HomeClients = () => {
           className="logout-button"
           onClick={() => {
             localStorage.removeItem("currentUserID");
+            navigate("/Login");
           }}
         >
           Logout
