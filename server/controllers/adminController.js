@@ -1,5 +1,12 @@
 const con = require("../config/database");
 var Check = require("../models/check");
+const crypto = require("crypto");
+const mysql = require("mysql2/promise");
+
+function generateToken() {
+  const tokenLength = 32;
+  return crypto.randomBytes(tokenLength).toString("hex");
+}
 
 exports.loginAdmin = async (req, res) => {
   console.log("hi");
@@ -31,8 +38,24 @@ exports.loginAdmin = async (req, res) => {
 
       if (isPasswordValid) {
         // Passwords match, user is authenticated
+        const newToken = generateToken();
+        const insertTokenQuery =
+          "UPDATE admin SET token = ? WHERE admin_id = ? ";
+        const updateValues = [newToken, loginResult[0].customer_id];
 
-        res.status(200).json({ id: loginResult[0].customer_id });
+        con.query(insertTokenQuery, updateValues, (error, results) => {
+          if (error) {
+            console.error("Error:", error);
+          } else {
+            console.log("Token inserted successfully.");
+
+            res
+              .status(200)
+              .json({ id: loginResult[0].customer_id, token: newToken });
+          }
+          // Close the database connection
+          con.end();
+        });
       } else {
         // Passwords do not match, authentication failed
         res.status(401).json({ error: "Invalid credentials" });
@@ -161,6 +184,15 @@ exports.getAllVouchers = async (req, res) => {
 
 exports.AdminFutureAppointments = async (req, res) => {
   try {
+    const security = await validateToken(req.query.token);
+    if (!security) {
+      res.status(400).json({ error: "you are not admin" });
+      return;
+    }
+  } catch (err) {
+    res.status(500).json({ error: "internal server error" });
+  }
+  try {
     const getFutureAppointmentsQuery = `
       SELECT 
         a.date_time,
@@ -229,3 +261,33 @@ exports.deleteVoucher = (req, res) => {
     }
   });
 };
+
+async function validateToken(token) {
+  // try {
+  //   // SQL query to check if the token exists
+  //   const selectQuery = "SELECT COUNT(*) AS count FROM admin WHERE token = ?";
+  //   const [rows] = await con.execute(selectQuery, [token]);
+
+  //   const rowCount = rows[0].count;
+  //   return rowCount > 0;
+  // } catch (error) {
+  //   console.error("Error:", error);
+  //   return false; // Indicate validation failure
+  // } finally {
+  //   // Close the database connection
+  //   con.end();
+  // }
+  return new Promise((resolve, reject) => {
+    let query = `SELECT * FROM admin WHERE token = \'${token}\'`;
+    console.log(query);
+
+    con.query(query, (error, results, fields) => {
+      if (error) {
+        reject("Error executing the query: " + error.stack);
+        return;
+      }
+      if (results.length > 0) resolve(true);
+      else resolve(false);
+    });
+  });
+}

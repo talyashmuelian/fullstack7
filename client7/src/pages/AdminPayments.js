@@ -8,6 +8,7 @@ import {
 import "../css/AdminPayments.css";
 
 const AdminPayments = () => {
+  const token = sessionStorage.getItem("token");
   const [selectedUser, setSelectedUser] = useState("");
   const [amountToBePaid, setAmountToBePaid] = useState("");
   const [vouchers, setVouchers] = useState([]);

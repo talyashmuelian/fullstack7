@@ -3,6 +3,7 @@ import { requestsPost } from "../requestsFromServer.js";
 import "../css/CreateAppointments.css";
 
 const CreateAppointments = () => {
+  const token = sessionStorage.getItem("token");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [meetingDuration, setMeetingDuration] = useState("");

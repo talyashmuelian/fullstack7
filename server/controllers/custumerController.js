@@ -70,7 +70,7 @@ exports.signinCustomer = (req, res) => {
 // postsRouter.js (Assuming you already have the required imports and database configuration)
 
 exports.loginCustomer = async (req, res) => {
-  console.log("hi");
+  console.log("hi73");
   const { username, password } = req.query;
 
   // Check if the username and password exist together in the database
@@ -81,7 +81,7 @@ exports.loginCustomer = async (req, res) => {
       console.error("Error checking login credentials:", loginErr);
 
       res.status(500).json({ error: "Error checking login credentials" });
-      res.send();
+      //  res.send();
     }
 
     // If no user with the given username is found, return an error
@@ -102,7 +102,7 @@ exports.loginCustomer = async (req, res) => {
         // Passwords match, user is authenticated
         // res.status(200).json({ message: "Login successful", });
         res.status(200).json({ id: loginResult[0].customer_id });
-        res.send();
+        //res.send();
       } else {
         // Passwords do not match, authentication failed
         res.status(401).json({ error: "Invalid credentials" });

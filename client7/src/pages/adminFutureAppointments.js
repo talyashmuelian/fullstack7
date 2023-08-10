@@ -127,13 +127,19 @@ const AdminFutureAppointments = () => {
     // Add more queue objects here...
   ]);
   const [expandedDate, setExpandedDate] = useState(null);
-
+  const token = sessionStorage.getItem("token");
   // Fetch queues from the server
   useEffect(() => {
     // Replace this with your actual fetch implementation
     const fetchQueues = async () => {
       try {
-        const response = await requestsGet("/Admin/AdminFutureAppointments");
+        const response = await requestsGet(
+          `/Admin/AdminFutureAppointments?token=${token}`
+        );
+        if (response.status !== 200) {
+          alert("error get AdminFutureAppointments");
+          return;
+        }
         let data = await response.json();
         let data1 = data.futureAppointments;
         setQueues(data1);
@@ -148,7 +154,7 @@ const AdminFutureAppointments = () => {
   // Cancel a queue by its ID
   const cancelQueue = async (queueId) => {
     try {
-      await fetch(`YOUR_DELETE_ENDPOINT/${queueId}`, {
+      await fetch(`YOUR_DELETE_ENDPOINT/${queueId}?token=${token}`, {
         method: "DELETE",
       });
       // Update queues after successful deletion

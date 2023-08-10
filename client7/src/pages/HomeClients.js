@@ -10,7 +10,7 @@ const HomeClients = () => {
   const [user, setUser] = useState({});
   var userID = JSON.parse(localStorage.getItem("currentUserID"));
 
-  useEffect(async () => {
+  useEffect(() => {
     // if (!userID) {
     //   navigate("/Login");
     // }
