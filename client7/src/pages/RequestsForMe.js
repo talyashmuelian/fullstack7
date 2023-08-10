@@ -6,12 +6,15 @@ import {
   requestsPut,
 } from "../requestsFromServer.js";
 import "../css/RequestsForMe.css";
+import Modal from "./Modal";
 
 const RequestsForMe = () => {
   const [requestsList, setRequestsList] = useState([]);
   const [customer_id, setCustomer_id] = useState(
     JSON.parse(localStorage.getItem("currentUserID"))
   );
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   useEffect(() => {
     fetchRequestsData();
@@ -52,22 +55,18 @@ const RequestsForMe = () => {
       );
       if (response1.status == 200) {
         console.log("The exchange was made successfully", response1);
-        alert("The exchange was made successfully");
+        //alert("The exchange was made successfully");
+        setModalMessage("The exchange was made successfully");
+        setModalVisible(true);
       }
       fetchRequestsData();
     } catch (error) {
       console.error("Error The exchange was made", error);
     }
   };
-
-  //   const handleReplacementRequest = (request) => {
-  //     // Assuming you have functions for making PUT and DELETE requests to the server
-  //     // Make a PUT request to update the customer_appointment
-  //     // Make a DELETE request to delete the request from the server
-  //     // You can implement these functions in the "../requestsFromServer.js" file
-  //     // and call them here to update and delete the request.
-  //     console.log("Replacement request clicked for: ", request);
-  //   };
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   return (
     <div className="my-requests-container">
@@ -93,6 +92,7 @@ const RequestsForMe = () => {
           </div>
         ))
       )}
+      {modalVisible && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );
 };

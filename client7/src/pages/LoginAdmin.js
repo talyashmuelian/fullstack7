@@ -3,10 +3,13 @@ import { Link } from "react-router-dom"; // Assuming you're using React Router f
 import "../css/Login.css";
 import { requestsGet } from "../requestsFromServer.js";
 import { useNavigate, NavLink } from "react-router-dom";
+import Modal from "./Modal";
 
 const LoginAdmin = () => {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({});
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -28,13 +31,20 @@ const LoginAdmin = () => {
         sessionStorage.setItem("token", data.token);
         navigate("/HomeAdmin");
       } else {
-        alert("Username or password is incorrect");
+        //alert("Username or password is incorrect");
+        setModalMessage("Username or password is incorrect");
+        setModalVisible(true);
       }
     } catch (error) {
       console.error(error);
-      alert("Username or password is incorrect11");
+      //alert("Username or password is incorrect11");
+      setModalMessage("Username or password is incorrect");
+      setModalVisible(true);
     }
   }
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -72,6 +82,7 @@ const LoginAdmin = () => {
           <Link to={`/Login`}>Login as Customer</Link>
         </div>
       </form>
+      {modalVisible && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );
 };

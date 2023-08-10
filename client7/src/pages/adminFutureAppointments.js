@@ -5,10 +5,14 @@ import {
   requestsPost,
 } from "../requestsFromServer.js";
 import "../css/adminFutureAppointments.css";
+import Modal from "./Modal";
 
 const AdminFutureAppointments = () => {
   const [queues, setQueues] = useState([]);
   const [expandedDate, setExpandedDate] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
   const token = sessionStorage.getItem("token");
 
   // Fetch queues from the server
@@ -20,7 +24,7 @@ const AdminFutureAppointments = () => {
           `/Admin/AdminFutureAppointments?token=${token}`
         );
         if (response.status !== 200) {
-          alert("error get AdminFutureAppointments");
+          console.log("error get AdminFutureAppointments");
           return;
         }
         let data = await response.json();
@@ -42,7 +46,9 @@ const AdminFutureAppointments = () => {
         `/Admin/cancelAppointment/${appointment_id}?token=${token}`
       );
       if (response.status == 200) {
-        alert("The appointment was successfully canceled");
+        //alert("The appointment was successfully canceled");
+        setModalMessage("The appointment was successfully canceled");
+        setModalVisible(true);
       }
       // Update queues after successful deletion
       setQueues((prevQueues) =>
@@ -52,7 +58,9 @@ const AdminFutureAppointments = () => {
       console.error("Error canceling queue:", error);
     }
   };
-
+  const closeModal = () => {
+    setModalVisible(false);
+  };
   // Group queues by date
   const queuesByDate = queues.reduce((acc, queue) => {
     const date = new Date(queue.date_time).toLocaleDateString("en-US", {
@@ -127,6 +135,7 @@ const AdminFutureAppointments = () => {
           )}
         </div>
       ))}
+      {modalVisible && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );
 };

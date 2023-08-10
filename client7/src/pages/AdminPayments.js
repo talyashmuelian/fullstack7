@@ -6,6 +6,7 @@ import {
   requestsDelete,
 } from "../requestsFromServer.js";
 import "../css/AdminPayments.css";
+import Modal from "./Modal";
 
 const AdminPayments = () => {
   const token = sessionStorage.getItem("token");
@@ -13,6 +14,8 @@ const AdminPayments = () => {
   const [amountToBePaid, setAmountToBePaid] = useState("");
   const [vouchers, setVouchers] = useState([]);
   const [users, setUsers] = useState([{ id: 1, userName: "kfhv" }]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const fetchUsers = async () => {
     try {
@@ -59,7 +62,9 @@ const AdminPayments = () => {
         paymentData
       ); // Adjust the API endpoint
       if (response.status !== 200) {
-        alert("error create a new voucer");
+        //alert("error create a new voucer");
+        setModalMessage("error create a new voucer");
+        setModalVisible(true);
       } else {
         const newVoucher = await response.json();
         console.log(newVoucher.voucher);
@@ -68,7 +73,9 @@ const AdminPayments = () => {
       // Handle success, e.g., show a success message, update the list of vouchers
     } catch (error) {
       console.error("Error adding payment:", error);
-      alert("Error adding payment:", error);
+      //alert("Error adding payment:", error);
+      setModalMessage("Error adding payment:");
+      setModalVisible(true);
     }
   };
 
@@ -88,14 +95,20 @@ const AdminPayments = () => {
         );
       } else {
         console.error("Error deleting voucher");
-        alert("Error deleting voucher");
+        //alert("Error deleting voucher");
+        setModalMessage("Error deleting voucher");
+        setModalVisible(true);
       }
     } catch (error) {
       console.error("Error deleting voucher:", error);
-      alert("Error deleting voucher:", error);
+      //alert("Error deleting voucher:", error);
+      setModalMessage("Error deleting voucher");
+      setModalVisible(true);
     }
   };
-
+  const closeModal = () => {
+    setModalVisible(false);
+  };
   return (
     <div>
       {/* Add payment form */}
@@ -155,6 +168,7 @@ const AdminPayments = () => {
           </tbody>
         </table>
       </div>
+      {modalVisible && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );
 };

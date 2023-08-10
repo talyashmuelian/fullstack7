@@ -4,6 +4,8 @@ import "../css/Signin.css";
 import { Link } from "react-router-dom";
 import { useNavigate, NavLink } from "react-router-dom";
 import { requestsPost } from "../requestsFromServer";
+import Modal from "./Modal";
+
 //להיות בטוחה שהמספר זהות יהיה זהה בים שני האובייקטים
 const Signin = () => {
   const navigate = useNavigate();
@@ -20,6 +22,8 @@ const Signin = () => {
   const [visibilityMoreInfo, setvisibilityMoreInfo] = useState({
     visibility: "hidden",
   });
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -85,7 +89,9 @@ const Signin = () => {
           localStorage.setItem("currentUserID", data.customer_id);
           navigate("/HomeClients");
         } else {
-          alert("username alrady exist");
+          //alert("username alrady exist");
+          setModalMessage("username alrady exist");
+          setModalVisible(true);
         }
       } catch (error) {
         console.error(error);
@@ -95,6 +101,9 @@ const Signin = () => {
     } catch {
       //error
     }
+  };
+  const closeModal = () => {
+    setModalVisible(false);
   };
 
   return (
@@ -171,38 +180,8 @@ const Signin = () => {
         <div>
           <Link to={`/Login`}>Login</Link>
         </div>
-        {/* <h3>More Info</h3>
-        <div className="info-details">
-          <input
-            name="name"
-            className="info-item"
-            type="text"
-            value={inputs.name || "Name"}
-            onChange={handleChangeI}
-          />
-          <input
-            name="email"
-            className="info-item"
-            type="text"
-            value={inputs.email || "Email"}
-            onChange={handleChangeI}
-          />
-          <input
-            name="phone"
-            className="info-item"
-            type="text"
-            value={inputs.phone || "Phone"}
-            onChange={handleChangeI}
-          />
-          <input
-            name="website"
-            className="info-item"
-            type="text"
-            value={inputs.website || "Website"}
-            onChange={handleChangeI}
-          />
-        </div> */}
       </form>
+      {modalVisible && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import {
   requestsPut,
 } from "../requestsFromServer.js";
 import "../css/CustomerPayments.css";
+import Modal from "./Modal";
 
 const CustomerPayments = () => {
   const [customer_id, setCustomer_id] = useState(
@@ -13,6 +14,8 @@ const CustomerPayments = () => {
   const [vouchers, setVouchers] = useState([]);
   const [paidVouchers, setPaidVouchers] = useState([]);
   const [unpaidVouchers, setUnpaidVouchers] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -57,7 +60,9 @@ const CustomerPayments = () => {
       let response = await requestsPut(`/payments/pay/${voucherId}`, {});
       console.log("after fetch pay");
       if (response.status !== 200) {
-        alert("error handleing payment");
+        //alert("error handleing payment");
+        setModalMessage("error handleing payment");
+        setModalVisible(true);
       } else {
         // Update the state to mark the voucher as paid
         const updatedVouchers = vouchers.map((voucher) =>
@@ -75,10 +80,14 @@ const CustomerPayments = () => {
       }
     } catch (error) {
       console.error("Error making payment:", error);
-      alert("error handleing payment");
+      //alert("error handleing payment");
+      setModalMessage("error handleing payment");
+      setModalVisible(true);
     }
   };
-
+  const closeModal = () => {
+    setModalVisible(false);
+  };
   return (
     <div>
       <div>
@@ -106,6 +115,7 @@ const CustomerPayments = () => {
           ))}
         </ul>
       </div>
+      {modalVisible && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );
 };

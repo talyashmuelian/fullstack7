@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { requestsGet, requestsPost } from "../requestsFromServer.js"; // Assuming you have functions for making GET and POST requests to the server
 import "../css/MakeAppointment.css";
+import Modal from "./Modal";
 
 const MakeAppointment = () => {
   const [futureQueues, setFutureQueues] = useState([]);
@@ -15,6 +16,8 @@ const MakeAppointment = () => {
     additionalInfo: "",
     reminder: 0,
   });
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   // Fetch all future queues, both available and occupied, on component mount
   useEffect(() => {
@@ -92,7 +95,9 @@ const MakeAppointment = () => {
         appointment_id: selectedQueue.appointment_id,
         ...formData,
       });
-      alert("Appointment added successfully!");
+      //alert("Appointment added successfully!");
+      setModalMessage("Appointment added successfully!");
+      setModalVisible(true);
       deleteObjectById(selectedQueue.appointment_id);
       setSelectedQueue(null);
 
@@ -114,23 +119,36 @@ const MakeAppointment = () => {
       // Handle the response as needed
       if (response.status == 200) {
         console.log("Exchange request submitted!", response);
-        alert("Exchange request submitted successfully!");
+        //alert("Exchange request submitted successfully!");
+        setModalMessage("Exchange request submitted successfully!");
+        setModalVisible(true);
       } else if (response.status == 201) {
         console.log(
           "The request already exists. Wait patiently for a reply",
           response
         );
-        alert("The request already exists. Wait patiently for a reply");
+        //alert("The request already exists. Wait patiently for a reply");
+        setModalMessage(
+          "The request already exists. Wait patiently for a reply"
+        );
+        setModalVisible(true);
       } else if (response.status == 400) {
         alert(
           "This appointment belongs to you. You cannot ask for a replacement yourself"
         );
+        setModalMessage(
+          "This appointment belongs to you. You cannot ask for a replacement yourself"
+        );
+        setModalVisible(true);
       }
 
       setIsRequestExchangeOpen(false);
     } catch (error) {
       console.error("Error submitting exchange request:", error);
     }
+  };
+  const closeModal = () => {
+    setModalVisible(false);
   };
 
   return (
@@ -201,6 +219,7 @@ const MakeAppointment = () => {
           {/* Add a button or link to close the modal */}
         </div>
       )}
+      {modalVisible && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );
 };

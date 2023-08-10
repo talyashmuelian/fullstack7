@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { requestsPost } from "../requestsFromServer.js";
 import "../css/CreateAppointments.css";
+import Modal from "./Modal";
 
 const CreateAppointments = () => {
   const token = sessionStorage.getItem("token");
@@ -9,6 +10,8 @@ const CreateAppointments = () => {
   const [meetingDuration, setMeetingDuration] = useState("");
   const [workStartTime, setWorkStartTime] = useState("");
   const [numQueues, setNumQueues] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const handleCreateAppointments = async () => {
     const appointments = [];
@@ -42,26 +45,25 @@ const CreateAppointments = () => {
     console.log(appointments);
 
     try {
-      const response = await requestsPost(`/Admin/createAppointments?token=${token}`, {
-        appointments: appointments,
-      });
+      const response = await requestsPost(
+        `/Admin/createAppointments?token=${token}`,
+        {
+          appointments: appointments,
+        }
+      );
       // Handle the response as needed
       if (response.status == 200) {
         console.log("The appointments have been successfully added!", response);
-        alert("The appointments have been successfully added!");
+        //alert("The appointments have been successfully added!");
+        setModalMessage("The appointments have been successfully added!");
+        setModalVisible(true);
       }
     } catch (error) {
       console.error("Failed to add appointments", error);
     }
-
-    // Make a POST request to the server
-    requestsPost(`/create-appointments?token=${token}`, { appointments })
-      .then((response) => {
-        // Handle success
-      })
-      .catch((error) => {
-        // Handle error
-      });
+  };
+  const closeModal = () => {
+    setModalVisible(false);
   };
 
   return (
@@ -105,6 +107,7 @@ const CreateAppointments = () => {
         />
       </div>
       <button onClick={handleCreateAppointments}>Create</button>
+      {modalVisible && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );
 };
