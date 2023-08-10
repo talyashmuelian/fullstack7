@@ -54,7 +54,6 @@ exports.loginAdmin = async (req, res) => {
               .json({ id: loginResult[0].customer_id, token: newToken });
           }
           // Close the database connection
-          con.end();
         });
       } else {
         // Passwords do not match, authentication failed
