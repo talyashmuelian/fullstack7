@@ -68,10 +68,7 @@ const LoginAdmin = () => {
         </div>
         <button type="submit">Login</button>
         <div>
-          <Link to={`/Signin`}>Sign In</Link>
-        </div>
-        <div>
-          <Link to={`/LoginAdmin`}>Login as Customer</Link>
+          <Link to={`/Login`}>Login as Customer</Link>
         </div>
       </form>
     </div>

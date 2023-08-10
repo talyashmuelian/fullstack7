@@ -1,18 +1,24 @@
 import { Outlet, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { requestsGet } from "../requestsFromServer.js";
+import { useNavigate, NavLink } from "react-router-dom";
 
 import "../css/HomeClients.css"; // Styles for the redesigned component
 
 const HomeClients = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState({});
   var userID = JSON.parse(localStorage.getItem("currentUserID"));
 
-  //   useEffect(async () => {
-  //     const response = await requestsGet(`/customer/${userID}/info`);
-  //     let data = await response.json();
-  //     setUser(data.name);
-  //   }, []);
+  useEffect(async () => {
+    if (!userID) {
+      navigate("/Login");
+    }
+
+    // const response = await requestsGet(`/customer/${userID}/info`);
+    // let data = await response.json();
+    // setUser(data.name);
+  }, []);
 
   return (
     <div className="users-container">

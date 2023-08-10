@@ -37,12 +37,14 @@ export async function requestsPut(path, object) {
       "Content-type": "application/json; charset=UTF-8",
     },
   });
-  return await response.json();
+  return response;
+  //return await response.json();
 }
 
 export async function requestsDelete(path) {
   const response = await fetch(hostname + path, {
     method: "DELETE",
   });
-  return await response.json();
+  return response;
+  // return await response.json();
 }
