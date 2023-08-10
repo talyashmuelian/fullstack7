@@ -40,6 +40,10 @@ const schemaPasswords = Joi.object().keys({
   username: Joi.string().required(),
   password: Joi.string().required(),
 });
+const newPayment = Joi.object().keys({
+  customer_id: Joi.number().required(),
+  amount_to_be_paid: Joi.number().required(),
+});
 
 const ObjectCheck = {
   identification_customers: schemaIdentification_customers,
@@ -48,6 +52,7 @@ const ObjectCheck = {
   requests: schemaRequest,
   appointments: schemaAppointment,
   passwords: schemaPasswords,
+  newPayment: newPayment,
 };
 
 exports.check = function (type, object) {

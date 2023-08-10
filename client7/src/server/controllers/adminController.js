@@ -126,6 +126,45 @@ async function checkAppointmentExist(date_time) {
   });
 }
 
+exports.getAllUsers = async (req, res) => {
+  try {
+    const getUsersQuery = "SELECT * FROM customer_information";
+    con.query(getUsersQuery, (Err, Result) => {
+      if (Err) {
+        console.error("Error getting users", Err);
+        res.status(500).json({ error: "Error getting customer appointments" });
+        return;
+      }
+
+      res.status(200);
+      res.send(JSON.stringify(Result));
+    });
+  } catch (error) {
+    console.error("Error processing request:", error);
+    res.status(503).json({ error: "Error processing request" });
+  }
+};
+
+
+exports.getAllVouchers = async (req, res) => {
+  try {
+    const getVouchersQuery = "SELECT * FROM payment_vouchers";
+    con.query(getVouchersQuery, (Err, Result) => {
+      if (Err) {
+        console.error("Error getting users", Err);
+        res.status(500).json({ error: "Error getting vouchers" });
+        return;
+      }
+
+      res.status(200);
+      res.send(JSON.stringify(Result));
+    });
+  } catch (error) {
+    console.error("Error processing request:", error);
+    res.status(503).json({ error: "Error processing request" });
+  }
+};
+
 // exports.createAppointments = async (req, res) => {
 //   const appointments = req.body.appointments;
 //   console.log(appointments);

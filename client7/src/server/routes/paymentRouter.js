@@ -1,15 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const mysql = require("mysql2");
-const appointmentController = require("../controllers/appointController");
+const paymentController = require("../controllers/paymentController");
 
-// Parse incoming request bodies in a middleware before your handlers
-//router.use(bodyParser.json());
-
-// Create a pool to manage database connections
-//const pool = mysql.createPool(dbConfig);
-
-// Route to handle the POST request for creating a new customer
-//router.post("/signIn", custumerController.signinCustomer);
-
+router.post("/setNewPaymentVoucher", paymentController.setNewPayment);
+router.get("/allVouchers", paymentController.getAllVouchers);
+router.put("/pay/:voucherId", paymentController.pay);
+router.delete("/vouchers/:voucherId", paymentController.deleteVoucher);
 module.exports = router;

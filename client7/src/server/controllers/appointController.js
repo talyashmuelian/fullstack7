@@ -157,7 +157,7 @@ exports.getHistoryAppointmentsForCus = async (req, res) => {
         if (getAppointmentsErr) {
           console.error(
             "Error getting customer appointments:",
-            getAppointmentErr
+            getAppointmentsErr
           );
           res
             .status(500)

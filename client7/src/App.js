@@ -13,6 +13,8 @@ import MyRequests from "./pages/MyRequests";
 import RequestsForMe from "./pages/RequestsForMe";
 import HomeAdmin from "./pages/HomeAdmin";
 import CreateAppointments from "./pages/CreateAppointments";
+import CustomerPayments from "./pages/CustomerPayments";
+import AdminPayments from "./pages/AdminPayments";
 
 function App() {
   return (
@@ -33,7 +35,7 @@ function App() {
             path=":id/Appointments/FutureAppointments"
             element={<LoginAdmin />}
           />
-          <Route path=":id/Payments" element={<LoginAdmin />} />
+          <Route path=":id/Payments" element={<AdminPayments />} />
         </Route>
         <Route path="Users" element={<HomeClients />}>
           <Route path=":id/Home" index />
@@ -46,7 +48,7 @@ function App() {
             path=":id/Appointments/Future"
             element={<FutureAppointment />}
           />
-          <Route path=":id/Payments" element={<Login />} />
+          <Route path=":id/Payments" element={<CustomerPayments />} />
 
           <Route path=":id/Messages" element={<Login />} />
 
