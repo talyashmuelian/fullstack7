@@ -34,6 +34,9 @@ const schemaAppointment = Joi.object().keys({
   reminder: Joi.number().required(),
   additionalInfo: Joi.string().required(),
 });
+const schemaCreateAppointments = Joi.object({
+  appointments: Joi.array().items(Joi.object()).required(),
+});
 
 const schemaPasswords = Joi.object().keys({
   id: Joi.number().required(),
@@ -52,6 +55,7 @@ const ObjectCheck = {
   requests: schemaRequest,
   appointments: schemaAppointment,
   passwords: schemaPasswords,
+  createAppointments: schemaCreateAppointments,
   newPayment: newPayment,
 };
 

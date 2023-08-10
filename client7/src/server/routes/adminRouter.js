@@ -7,6 +7,7 @@ const adminController = require("../controllers/adminController");
 
 router.get("/logIn", custumerController.loginCustomer); //למה זה לא כניסה של אדמין-לבדוק
 router.post("/createAppointments", adminController.createAppointments);
+router.get("/AdminFutureAppointments", adminController.AdminFutureAppointments);
 router.get("/users", adminController.getAllUsers);
 router.get("/vouchers", adminController.getAllVouchers);
 
