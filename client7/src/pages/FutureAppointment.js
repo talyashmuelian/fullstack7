@@ -49,15 +49,19 @@ const FutureAppointment = () => {
   return (
     <div className="history-container">
       <h2>FutureAppointment</h2>
-      {queues.map((queue) => (
-        <div className="queue-row" key={queue.appointment_id}>
-          <span>{queue.appointment_id}</span>
-          <span>{queue.date_time}</span>
-          <button onClick={() => cancelQueue(queue.appointment_id)}>
-            Cancel Appointment
-          </button>
-        </div>
-      ))}
+      {queues.length === 0 ? (
+        <p>No future queues</p>
+      ) : (
+        queues.map((queue) => (
+          <div className="queue-row" key={queue.appointment_id}>
+            <span>{queue.appointment_id}</span>
+            <span>{queue.date_time}</span>
+            <button onClick={() => cancelQueue(queue.appointment_id)}>
+              Cancel Appointment
+            </button>
+          </div>
+        ))
+      )}
     </div>
   );
 };

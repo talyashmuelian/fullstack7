@@ -229,6 +229,7 @@ exports.AdminFutureAppointments = async (req, res) => {
   try {
     const getFutureAppointmentsQuery = `
       SELECT 
+      a.appointment_id,
         a.date_time,
         ca.customer_id,
         ca.additionalInfo,
@@ -250,6 +251,7 @@ exports.AdminFutureAppointments = async (req, res) => {
 
       const futureAppointments = queryResult.map((row) => {
         const appointment = {
+          appointment_id: row.appointment_id,
           date_time: row.date_time,
           name: null,
           id_number: null,
@@ -404,3 +406,143 @@ async function validateToken(token) {
     });
   });
 }
+
+exports.cancelAppointment = async (req, res) => {
+  try {
+    const security = await validateToken(req.query.token);
+    if (!security) {
+      res.status(400).json({ error: "You are not an admin" });
+      return;
+    }
+
+    const { appointment_id } = req.params;
+
+    con.getConnection((getConnectionErr, con) => {
+      if (getConnectionErr) {
+        console.error("Error acquiring connection:", getConnectionErr);
+        res.status(500).json({ error: "Error acquiring connection" });
+        return;
+      }
+
+      // Start a transaction
+      con.beginTransaction((transactionErr) => {
+        if (transactionErr) {
+          console.error("Error starting transaction:", transactionErr);
+          res.status(500).json({ error: "Error starting transaction" });
+          con.release();
+          return;
+        }
+
+        try {
+          // Delete related entries from the requests table
+          const deleteRequestsQuery =
+            "DELETE FROM requests WHERE sender_appointment_id = ? OR recipient_appointment_id = ?";
+          con.query(
+            deleteRequestsQuery,
+            [appointment_id, appointment_id],
+            (deleteRequestsErr) => {
+              if (deleteRequestsErr) {
+                console.error("Error deleting requests:", deleteRequestsErr);
+                con.rollback(() => {
+                  console.error(
+                    "Transaction rolled back due to error in requests deletion"
+                  );
+                  con.release();
+                });
+                res.status(500).json({ error: "Error deleting requests" });
+                return;
+              }
+
+              // Delete related entry from the customer_appointment table
+              const deleteCustomerAppointmentQuery =
+                "DELETE FROM customer_appointment WHERE appointment_id = ?";
+              con.query(
+                deleteCustomerAppointmentQuery,
+                [appointment_id],
+                (deleteCustomerAppointmentErr) => {
+                  if (deleteCustomerAppointmentErr) {
+                    console.error(
+                      "Error deleting customer appointment:",
+                      deleteCustomerAppointmentErr
+                    );
+                    con.rollback(() => {
+                      console.error(
+                        "Transaction rolled back due to error in customer appointment deletion"
+                      );
+                      con.release();
+                    });
+                    res
+                      .status(500)
+                      .json({ error: "Error deleting customer appointment" });
+                    return;
+                  }
+
+                  // Delete the appointment from the appointments table
+                  const deleteAppointmentQuery =
+                    "DELETE FROM appointments WHERE appointment_id = ?";
+                  con.query(
+                    deleteAppointmentQuery,
+                    [appointment_id],
+                    (deleteAppointmentErr) => {
+                      if (deleteAppointmentErr) {
+                        console.error(
+                          "Error deleting appointment:",
+                          deleteAppointmentErr
+                        );
+                        con.rollback(() => {
+                          console.error(
+                            "Transaction rolled back due to error in appointment deletion"
+                          );
+                          con.release();
+                        });
+                        res
+                          .status(500)
+                          .json({ error: "Error deleting appointment" });
+                        return;
+                      }
+
+                      // Commit the transaction
+                      con.commit((commitErr) => {
+                        if (commitErr) {
+                          console.error(
+                            "Error committing transaction:",
+                            commitErr
+                          );
+                          con.rollback(() => {
+                            console.error(
+                              "Transaction rolled back due to commit error"
+                            );
+                            con.release();
+                          });
+                          res
+                            .status(500)
+                            .json({ error: "Error committing transaction" });
+                        } else {
+                          con.release();
+                          res.status(200).json({
+                            message: "Appointment canceled successfully",
+                          });
+                        }
+                      });
+                    }
+                  );
+                }
+              );
+            }
+          );
+        } catch (error) {
+          console.error("Error during transaction:", error);
+          con.rollback(() => {
+            console.error("Transaction rolled back due to error");
+            con.release();
+          });
+          res.status(500).json({ error: "Error during transaction" });
+        }
+      });
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal server error" });
+    return;
+  }
+};

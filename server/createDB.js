@@ -233,3 +233,6 @@ function insertData(connection, insertions, callback) {
 // ADD COLUMN sender_appointment_id INT,
 // ADD CONSTRAINT fk_sender_appointment
 // FOREIGN KEY (sender_appointment_id) REFERENCES appointments(appointment_id);
+
+// ALTER TABLE appointments.admin
+// ADD token VARCHAR(255);

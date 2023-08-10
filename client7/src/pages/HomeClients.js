@@ -11,19 +11,24 @@ const HomeClients = () => {
   var userID = JSON.parse(localStorage.getItem("currentUserID"));
 
   useEffect(() => {
-    // if (!userID) {
-    //   navigate("/Login");
-    // }
-    // const response = await requestsGet(`/customer/${userID}/info`);
-    // let data = await response.json();
-    // setUser(data.name);
+    const fetchName = async () => {
+      try {
+        const response = await requestsGet(`/customers/${userID}/info`);
+        let data = await response.json();
+        setUser(data.customer);
+      } catch (error) {
+        console.error("Error fetching name:", error);
+      }
+    };
+
+    fetchName();
   }, []);
   if (!userID) {
     return <Navigate to="/Login" />;
   }
   return (
     <div className="users-container">
-      <h1 className="user-name">Hello, {user.name}</h1>
+      <h1 className="user-name">Hello, {user.username}</h1>
       <Link to="/Login">
         <button
           className="logout-button"

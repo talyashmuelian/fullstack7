@@ -18,8 +18,9 @@ const History = () => {
       const response = await requestsGet(
         `/appointments/history/${customer_id}`
       );
+
       let data = await response.json();
-      setHistoryData(data);
+      setHistoryData([...data]);
     } catch (error) {
       console.error("Error fetching history data:", error);
     }

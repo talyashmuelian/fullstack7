@@ -164,12 +164,16 @@ exports.getHistoryAppointmentsForCus = async (req, res) => {
             .json({ error: "Error getting customer appointments" });
           return;
         }
-        console.log(customer_id);
-        console.log(getAppointmentsResult);
+
         // Extract all appointment_ids for the given customer
         const appointmentIds = getAppointmentsResult.map(
           (appointment) => appointment.appointment_id
         );
+
+        if (appointmentIds.length === 0) {
+          res.status(200).json([]);
+          return;
+        }
 
         // Get all appointments whose date has already passed
         const currentDate = new Date()
@@ -178,8 +182,6 @@ exports.getHistoryAppointmentsForCus = async (req, res) => {
           .replace("T", " ");
         const getHistoryAppointmentsQuery =
           "SELECT * FROM appointments WHERE appointment_id IN (?) AND date_time < ?";
-        console.log(currentDate);
-        console.log(appointmentIds);
         con.query(
           getHistoryAppointmentsQuery,
           [appointmentIds, currentDate],
@@ -190,22 +192,86 @@ exports.getHistoryAppointmentsForCus = async (req, res) => {
                 getHistoryAppointmentsErr
               );
               res
-                .status(501)
+                .status(500)
                 .json({ error: "Error getting history appointments" });
               return;
             }
 
             // Return the history appointments for the given customer
-            res.status(200).json(getHistoryAppointmentsResult); //{ history_appointments: getHistoryAppointmentsResult }
+            res.status(200).json(getHistoryAppointmentsResult);
           }
         );
       }
     );
   } catch (error) {
     console.error("Error processing request:", error);
-    res.status(503).json({ error: "Error processing request" });
+    res.status(500).json({ error: "Error processing request" });
   }
 };
+
+// exports.getHistoryAppointmentsForCus = async (req, res) => {
+//   const customer_id = req.params.customer_id;
+
+//   try {
+//     // Get all customer_appointments for the given customer_id
+//     const getAppointmentsQuery =
+//       "SELECT appointment_id FROM customer_appointment WHERE customer_id = ?";
+//     con.query(
+//       getAppointmentsQuery,
+//       [customer_id],
+//       (getAppointmentsErr, getAppointmentsResult) => {
+//         if (getAppointmentsErr) {
+//           console.error(
+//             "Error getting customer appointments:",
+//             getAppointmentsErr
+//           );
+//           res
+//             .status(500)
+//             .json({ error: "Error getting customer appointments" });
+//           return;
+//         }
+//         console.log(customer_id);
+//         console.log(getAppointmentsResult);
+//         // Extract all appointment_ids for the given customer
+//         const appointmentIds = getAppointmentsResult.map(
+//           (appointment) => appointment.appointment_id
+//         );
+
+//         // Get all appointments whose date has already passed
+//         const currentDate = new Date()
+//           .toISOString()
+//           .slice(0, 19)
+//           .replace("T", " ");
+//         const getHistoryAppointmentsQuery =
+//           "SELECT * FROM appointments WHERE appointment_id IN (?) AND date_time < ?";
+//         console.log(currentDate);
+//         console.log(appointmentIds);
+//         con.query(
+//           getHistoryAppointmentsQuery,
+//           [appointmentIds, currentDate],
+//           (getHistoryAppointmentsErr, getHistoryAppointmentsResult) => {
+//             if (getHistoryAppointmentsErr) {
+//               console.error(
+//                 "Error getting history appointments:",
+//                 getHistoryAppointmentsErr
+//               );
+//               res
+//                 .status(501)
+//                 .json({ error: "Error getting history appointments" });
+//               return;
+//             }
+
+//             // Return the history appointments for the given customer
+//             res.status(200).json(getHistoryAppointmentsResult); //{ history_appointments: getHistoryAppointmentsResult }
+//           }
+//         );
+//       }
+//     );
+//   } catch (error) {
+//     console.error("Error processing request:", error);
+//     res.status(503).json({ error: "Error processing request" });
+//   }
+// };
 
 exports.makeAppointment = async (req, res) => {
   const { error } = Check.check("appointments", req.body);

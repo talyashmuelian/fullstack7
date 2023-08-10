@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { requestsGet } from "../requestsFromServer.js";
 import { useNavigate, NavLink } from "react-router-dom";
 
-import "../css/HomeClients.css"; // Styles for the redesigned component
+import "../css/HomeClients.css";
 
 const HomeAdmin = () => {
   const navigate = useNavigate();
@@ -14,15 +14,23 @@ const HomeAdmin = () => {
     if (!userID) {
       navigate("/LoginAdmin");
     }
-    // const response = await requestsGet(`/customer/${userID}/info`);
-    // let data = await response.json();
-    // setUser(data.name);
+    const fetchName = async () => {
+      try {
+        const response = await requestsGet(`/customers/${userID}/info`);
+        let data = await response.json();
+        setUser(data.customer);
+      } catch (error) {
+        console.error("Error fetching name:", error);
+      }
+    };
+
+    fetchName();
   }, []);
 
   return (
     <div className="users-container">
-      <h1 className="user-name">Hello, {user.name}</h1>
-      <Link to="/Login">
+      <h1 className="user-name">Hello, {user.username}</h1>
+      <Link to="/LoginAdmin">
         <button
           className="logout-button"
           onClick={() => {
