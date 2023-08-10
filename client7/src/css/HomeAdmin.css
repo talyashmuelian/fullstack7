@@ -1,0 +1,121 @@
+/* Add your global styles here */
+
+/* Styles for the container */
+.users-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center content vertically */
+    position: relative;
+  }
+  
+  /* User name style */
+  .user-name {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+    text-align: center;
+  }
+  
+  /* Logout button style */
+  .logout-button {
+    background-color: #ff6347;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: absolute;
+    top: 10px; /* Adjust the top position as needed */
+    left: 10px; /* Adjust the left position as needed */
+  }
+  
+  .logout-button:hover {
+    background-color: #e74c3c;
+  }
+  
+  /* Navigation style */
+  .user-navigation ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  
+  .user-navigation li {
+    position: relative;
+    text-align: center;
+  }
+  
+  .user-navigation a {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    color: #3498db;
+    transition: color 0.3s ease;
+    padding: 10px;
+    position: relative;
+  }
+  
+  .user-navigation a:hover {
+    color: #2980b9;
+  }
+  
+  /* Submenu style */
+  .sub-menu {
+    visibility: hidden;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    padding: 10px;
+    border-radius: 4px;
+    width: 200px; /* Adjust the width as needed */
+    text-align: left;
+    top: calc(100% + 5px);
+    left: 0;
+    display: none; /* Hide sub-menu items by default */
+  }
+  
+  .user-navigation li:hover .sub-menu {
+    visibility: visible;
+    display: block; /* Show sub-menu items on hover */
+  }
+  
+  .sub-menu li {
+    margin: 5px 0;
+  }
+  
+  /* Stack sub-menu items vertically */
+  .sub-menu ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sub-menu li {
+    margin: 5px 0;
+  }
+  
+  /* Adjustments for small screens */
+  @media screen and (max-width: 600px) {
+    .users-container {
+      max-width: 90%;
+    }
+  
+    .user-navigation ul {
+      flex-direction: column;
+    }
+  
+    .user-navigation li {
+      margin: 5px 0;
+    }
+  }
+  

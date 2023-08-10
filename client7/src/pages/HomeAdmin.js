@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { requestsGet } from "../requestsFromServer.js";
 import { useNavigate, NavLink } from "react-router-dom";
 
-import "../css/HomeClients.css";
+import "../css/HomeAdmin.css";
 
 const HomeAdmin = () => {
   const navigate = useNavigate();

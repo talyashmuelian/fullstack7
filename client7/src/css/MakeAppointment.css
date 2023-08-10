@@ -1,11 +1,9 @@
-/* MakeAppointment.css */
-
-/* General Styles */
+/* 
 body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background-color: #f0f2f5; /* Light Grey */
+    background-color: #f0f2f5; 
   }
   
   .make-appointment-container {
@@ -13,7 +11,6 @@ body {
     justify-content: space-between;
   }
   
-  /* Week Schedule Styles */
   .week-schedule {
     display: flex;
     flex-direction: column;
@@ -25,17 +22,16 @@ body {
     font-size: 18px;
     margin-bottom: 10px;
     padding: 10px;
-    background-color: #3b5998; /* Facebook Blue */
+    background-color: #3b5998; 
     color: #fff;
     border-radius: 5px;
     transition: background-color 0.2s ease;
   }
   
   .day:hover {
-    background-color: #203b82; /* Darker Facebook Blue */
+    background-color: #203b82;
   }
   
-  /* Queues Styles */
   .queues {
     display: flex;
     flex-direction: column;
@@ -55,7 +51,7 @@ body {
   }
   
   .queues button {
-    background-color: #3b5998; /* Facebook Blue */
+    background-color: #3b5998; 
     color: #fff;
     padding: 5px 10px;
     border: none;
@@ -65,10 +61,10 @@ body {
   }
   
   .queues button:hover {
-    background-color: #203b82; /* Darker Facebook Blue */
+    background-color: #203b82; 
   }
   
-  /* Appointment Form Styles */
+ 
   .appointment-form {
     display: none;
     flex-direction: column;
@@ -97,12 +93,12 @@ body {
   }
   
   .appointment-form button {
-    background-color: #3b5998; /* Facebook Blue */
+    background-color: #3b5998; 
     color: #fff;
     cursor: pointer;
   }
   
-  /* Request Exchange Modal Styles */
+  
   .request-exchange-modal {
     display: none;
     position: fixed;
@@ -128,7 +124,7 @@ body {
   }
   
   .request-exchange-modal button {
-    background-color: #3b5998; /* Facebook Blue */
+    background-color: #3b5998; 
     color: #fff;
     padding: 10px 15px;
     border: none;
@@ -136,4 +132,121 @@ body {
     cursor: pointer;
     margin-top: 10px;
   }
-  
+   */
+
+   /* Add your global styles here */
+
+/* Styles for the container */
+.make-appointment-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Queue item style */
+.queue-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.queue-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.queue-date {
+  font-size: 18px;
+  color: #333;
+}
+
+.queue-status {
+  font-size: 14px;
+  color: #777;
+}
+
+.queue-action-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.queue-action-button:hover {
+  background-color: #2980b9;
+}
+
+/* Form section style */
+.form-section {
+  margin-top: 20px;
+}
+
+.form-label {
+  font-size: 16px;
+  color: #333;
+}
+
+.form-input {
+  margin-top: 5px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.form-checkbox-label {
+  font-size: 14px;
+  color: #777;
+  margin-top: 10px;
+}
+
+/* Modal style */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.modal-message {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.modal-close-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-close-button:hover {
+  background-color: #2980b9;
+}
