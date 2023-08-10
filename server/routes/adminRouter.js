@@ -11,5 +11,6 @@ router.get("/AdminFutureAppointments", adminController.AdminFutureAppointments);
 router.get("/users", adminController.getAllUsers);
 router.get("/vouchers", adminController.getAllVouchers);
 router.delete("/vouchers/:voucherId", adminController.deleteVoucher);
+router.post("/setNewPaymentVoucher", adminController.setNewPayment);
 
 module.exports = router;

@@ -70,6 +70,17 @@ exports.loginAdmin = async (req, res) => {
 };
 
 exports.createAppointments = async (req, res) => {
+  try {
+    const security = await validateToken(req.query.token);
+    if (!security) {
+      res.status(400).json({ error: "you are not admin" });
+      return;
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "internal server error" });
+    return;
+  }
   const appointments = req.body.appointments;
   console.log(appointments);
 
@@ -146,6 +157,17 @@ async function checkAppointmentExist(date_time) {
 
 exports.getAllUsers = async (req, res) => {
   try {
+    const security = await validateToken(req.query.token);
+    if (!security) {
+      res.status(400).json({ error: "you are not admin" });
+      return;
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "internal server error" });
+    return;
+  }
+  try {
     const getUsersQuery = "SELECT * FROM customer_information";
     con.query(getUsersQuery, (Err, Result) => {
       if (Err) {
@@ -164,6 +186,17 @@ exports.getAllUsers = async (req, res) => {
 };
 
 exports.getAllVouchers = async (req, res) => {
+  try {
+    const security = await validateToken(req.query.token);
+    if (!security) {
+      res.status(400).json({ error: "you are not admin" });
+      return;
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "internal server error" });
+    return;
+  }
   try {
     const getVouchersQuery = "SELECT * FROM payment_vouchers";
     con.query(getVouchersQuery, (Err, Result) => {
@@ -190,7 +223,9 @@ exports.AdminFutureAppointments = async (req, res) => {
       return;
     }
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: "internal server error" });
+    return;
   }
   try {
     const getFutureAppointmentsQuery = `
@@ -244,7 +279,18 @@ exports.AdminFutureAppointments = async (req, res) => {
     res.status(500).json({ error: "Error processing request" });
   }
 };
-exports.deleteVoucher = (req, res) => {
+exports.deleteVoucher = async (req, res) => {
+  try {
+    const security = await validateToken(req.query.token);
+    if (!security) {
+      res.status(400).json({ error: "you are not admin" });
+      return;
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "internal server error" });
+    return;
+  }
   const { voucherId } = req.params;
 
   const deleteQuery = "DELETE FROM payment_vouchers WHERE voucher_id = ?";
@@ -262,21 +308,89 @@ exports.deleteVoucher = (req, res) => {
   });
 };
 
-async function validateToken(token) {
-  // try {
-  //   // SQL query to check if the token exists
-  //   const selectQuery = "SELECT COUNT(*) AS count FROM admin WHERE token = ?";
-  //   const [rows] = await con.execute(selectQuery, [token]);
+exports.setNewPayment = async (req, res) => {
+  try {
+    const security = await validateToken(req.query.token);
+    if (!security) {
+      res.status(400).json({ error: "you are not admin" });
+      return;
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "internal server error" });
+    return;
+  }
+  try {
+    const { customer_id, amount_to_be_paid } = req.body;
+    console.log(req.body);
 
-  //   const rowCount = rows[0].count;
-  //   return rowCount > 0;
-  // } catch (error) {
-  //   console.error("Error:", error);
-  //   return false; // Indicate validation failure
-  // } finally {
-  //   // Close the database connection
-  //   con.end();
-  // }
+    const { error } = Check.check("newPayment", req.body);
+    if (error) {
+      console.log("line14", error.details[0].message);
+      return res.status(400).send(error.details[0].message);
+    }
+
+    con.query(
+      "SELECT * FROM identification_customers WHERE customer_id = ?",
+      [customer_id],
+      async (err, rows1) => {
+        if (err) {
+          console.error("Error retrieving customer:", err);
+          return res.status(500).json({ error: "Error retrieving customer" });
+        }
+
+        if (!rows1 || rows1.length === 0) {
+          return res.status(404).json({ error: "Customer not found" });
+        }
+
+        con.query(
+          "SELECT MAX(voucher_id) as max_id FROM payment_vouchers",
+          async (err, result) => {
+            if (err) {
+              console.error("Error retrieving max voucher ID:", err);
+              return res
+                .status(500)
+                .json({ error: "Error retrieving max voucher ID" });
+            }
+
+            const nextId = result[0].max_id + 1;
+            const insertQuery =
+              "INSERT INTO payment_vouchers" +
+              "(voucher_id, customer_id, amount_to_be_paid, paid, voucher_created_at, payment_made_at)" +
+              "VALUES (?, ?, ?, ?, NOW(), ?)";
+            const values = [nextId, customer_id, amount_to_be_paid, 0, null];
+
+            con.query(insertQuery, values, (err) => {
+              if (err) {
+                console.error("Error inserting payment:", err);
+                return res
+                  .status(500)
+                  .json({ error: "Error inserting payment" });
+              }
+
+              res.status(200).json({
+                message: "Payment created successfully!",
+                voucher: {
+                  voucher_id: nextId,
+                  customer_id: customer_id,
+                  amount_to_be_paid: amount_to_be_paid,
+                  paid: 0,
+                  voucher_created_at: Date.now(),
+                  payment_made_at: null,
+                },
+              });
+            });
+          }
+        );
+      }
+    );
+  } catch (error) {
+    console.log("Error:", error);
+    res.status(500).json({ error: error });
+  }
+};
+
+async function validateToken(token) {
   return new Promise((resolve, reject) => {
     let query = `SELECT * FROM admin WHERE token = \'${token}\'`;
     console.log(query);

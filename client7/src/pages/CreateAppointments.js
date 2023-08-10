@@ -42,7 +42,7 @@ const CreateAppointments = () => {
     console.log(appointments);
 
     try {
-      const response = await requestsPost("/Admin/createAppointments", {
+      const response = await requestsPost(`/Admin/createAppointments?token=${token}`, {
         appointments: appointments,
       });
       // Handle the response as needed
@@ -55,7 +55,7 @@ const CreateAppointments = () => {
     }
 
     // Make a POST request to the server
-    requestsPost("/create-appointments", { appointments })
+    requestsPost(`/create-appointments?token=${token}`, { appointments })
       .then((response) => {
         // Handle success
       })

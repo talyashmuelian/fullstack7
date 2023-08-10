@@ -16,7 +16,7 @@ const AdminPayments = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await requestsGet("/admin/users"); // Adjust the API endpoint
+      const response = await requestsGet(`/admin/users?token=${token}`); // Adjust the API endpoint
       console.log(response);
       if (response.status !== 200) {
         console.error("Error fetching users:");
@@ -32,7 +32,7 @@ const AdminPayments = () => {
 
   const fetchVouchers = async () => {
     try {
-      const response = await requestsGet("/admin/vouchers"); // Adjust the API endpoint
+      const response = await requestsGet(`/admin/vouchers?token=${token}`); // Adjust the API endpoint
       if (response.status !== 200) {
         console.error("Error fetching vouchers:");
       } else {
@@ -55,7 +55,7 @@ const AdminPayments = () => {
       };
 
       const response = await requestsPost(
-        "/payments/setNewPaymentVoucher",
+        `/admin/setNewPaymentVoucher?token=${token}`,
         paymentData
       ); // Adjust the API endpoint
       if (response.status !== 200) {
@@ -79,7 +79,9 @@ const AdminPayments = () => {
 
   const handleDeleteVoucher = async (voucherId) => {
     try {
-      const response = await requestsDelete(`/admin/vouchers/${voucherId}`); // Adjust the API endpoint
+      const response = await requestsDelete(
+        `/admin/vouchers/${voucherId}?token=${token}`
+      ); // Adjust the API endpoint
       if (response.status === 204) {
         setVouchers((prevVouchers) =>
           prevVouchers.filter((voucher) => voucher.voucher_id !== voucherId)
