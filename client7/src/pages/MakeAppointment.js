@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { requestsGet, requestsPost } from "../requestsFromServer.js"; // Assuming you have functions for making GET and POST requests to the server
+import { requestsGet, requestsPost } from "../requestsFromServer.js";
 import "../css/MakeAppointment.css";
 import Modal from "./Modal";
 
@@ -19,7 +19,6 @@ const MakeAppointment = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  // Fetch all future queues, both available and occupied, on component mount
   useEffect(() => {
     fetchFutureQueues();
     fetchMyFutureQueues();
@@ -27,27 +26,28 @@ const MakeAppointment = () => {
 
   const fetchFutureQueues = async () => {
     try {
-      const response = await requestsGet("/appointments/availableAppointments"); // Replace with the appropriate API endpoint to fetch future queues
+      const response = await requestsGet("/appointments/availableAppointments");
+      const response1 = await requestsGet("/appointments/occupiedAppointments");
       let data = await response.json();
-      data = data.map((d) => {
-        return { ...d, isOccupied: false };
-      });
-      const response1 = await requestsGet("/appointments/occupiedAppointments"); // Replace with the appropriate API endpoint to fetch future queues
       let data1 = await response1.json();
-      data1 = data1.map((d) => {
-        return { ...d, isOccupied: true };
-      });
-      setFutureQueues([...data, ...data1]);
+      data = data.map((d) => ({ ...d, isOccupied: false }));
+      data1 = data1.map((d) => ({ ...d, isOccupied: true }));
+      const allQueues = [...data, ...data1];
+
+      allQueues.sort((a, b) => a.date_time.localeCompare(b.date_time));
+
+      setFutureQueues(allQueues);
     } catch (error) {
       console.error("Error fetching future queues:", error);
     }
   };
+
   const fetchMyFutureQueues = async () => {
     console.log(customer_id);
     try {
       const response = await requestsGet(
-        `/appointments/futureAppointments/${customer_id}` //
-      ); // Replace with the appropriate API endpoint to fetch future queues
+        `/appointments/futureAppointments/${customer_id}`
+      );
       let data = await response.json();
 
       setMyFutureQueues([...data]);
@@ -58,23 +58,14 @@ const MakeAppointment = () => {
 
   const handleQueueButtonClick = (queue) => {
     if (queue.isOccupied) {
-      // Handle "Request a Replacement" button click
       setIsRequestExchangeOpen(true);
       setSelectedQueueForReplace(queue);
-      //setSelectedQueue(queue);
     } else {
-      // Handle "Call for a Queue" button click
       openAppointmentForm(queue);
     }
   };
 
-  //   useEffect(() => {
-  //     // This will be triggered every time selectedQueueForReplace changes
-  //     console.log(selectedQueueForReplace);
-  //   }, [selectedQueueForReplace]);
-
   const openAppointmentForm = (queue) => {
-    // Implement the logic to open the appointment form and set the selectedQueue state
     setSelectedQueue(queue);
   };
 
@@ -85,23 +76,18 @@ const MakeAppointment = () => {
     setFutureQueues(updatedList);
   };
 
-  //צריך לרוקן את הטופס אחרי השליחה
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    // Implement the logic to submit the form and make a POST request to add a row in the queue table
     try {
       const response = await requestsPost("/appointments/makeAppointment", {
         customer_id: customer_id,
         appointment_id: selectedQueue.appointment_id,
         ...formData,
       });
-      //alert("Appointment added successfully!");
       setModalMessage("Appointment added successfully!");
       setModalVisible(true);
       deleteObjectById(selectedQueue.appointment_id);
       setSelectedQueue(null);
-
-      // Handle the response as neededs
       console.log("Appointment added successfully!", response);
     } catch (error) {
       console.error("Error adding appointment:", error);
@@ -109,17 +95,14 @@ const MakeAppointment = () => {
   };
 
   const handleRequestExchangeSubmit = async (queue) => {
-    // Implement the logic to submit the request exchange and make a POST request to add a row in the request table
     try {
       const response = await requestsPost("/requests/createRequest", {
         sender_client_id: customer_id,
         recipient_appointment_id: selectedQueueForReplace.appointment_id,
         sender_appointment_id: queue.appointment_id,
       });
-      // Handle the response as needed
       if (response.status == 200) {
         console.log("Exchange request submitted!", response);
-        //alert("Exchange request submitted successfully!");
         setModalMessage("Exchange request submitted successfully!");
         setModalVisible(true);
       } else if (response.status == 201) {
@@ -127,7 +110,6 @@ const MakeAppointment = () => {
           "The request already exists. Wait patiently for a reply",
           response
         );
-        //alert("The request already exists. Wait patiently for a reply");
         setModalMessage(
           "The request already exists. Wait patiently for a reply"
         );
@@ -141,40 +123,56 @@ const MakeAppointment = () => {
         );
         setModalVisible(true);
       }
-
       setIsRequestExchangeOpen(false);
     } catch (error) {
       console.error("Error submitting exchange request:", error);
     }
   };
+
   const closeModal = () => {
     setModalVisible(false);
   };
 
   return (
     <div>
-      {/* Display all future queues, both available and occupied */}
       {futureQueues.map((queue) => (
-        <div key={queue.appointment_id}>
-          <span>{queue.date_time}</span>
+        <div className="queue-item" key={queue.appointment_id}>
+          <div className="queue-info">
+            <span className="queue-date">
+              {new Date(queue.date_time).toLocaleString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              })}
+            </span>
+            <span className="queue-status">
+              {queue.isOccupied ? "Occupied" : "Available"}
+            </span>
+          </div>
           {queue.isOccupied ? (
-            <button onClick={() => handleQueueButtonClick(queue)}>
+            <button
+              className="queue-action-button"
+              onClick={() => handleQueueButtonClick(queue)}
+            >
               Request a Replacement
             </button>
           ) : (
-            <button onClick={() => handleQueueButtonClick(queue)}>
-              Call for a Queue
+            <button
+              className="queue-action-button"
+              onClick={() => handleQueueButtonClick(queue)}
+            >
+              Call for a Appointment
             </button>
           )}
         </div>
       ))}
-      {/* Appointment Form */}
       {selectedQueue && (
         <div>
           <h2>Setting an Appointment</h2>
           <form onSubmit={handleFormSubmit}>
-            {/* Add form fields for orderer's details, additional information, reminder, etc. */}
-            {/* e.g., */}
             <input
               type="text"
               placeholder="additionalInfo"
@@ -190,33 +188,41 @@ const MakeAppointment = () => {
               value={formData.reminder}
               onChange={(e) => {
                 let temp;
-                if (e.target == false) {
+                if (!e.target.checked) {
                   temp = 0;
                 } else temp = 1;
                 setFormData({ ...formData, reminder: temp });
               }}
             />
-            {/* Add more form fields as needed */}
             <button type="submit">Set an Appointment</button>
           </form>
         </div>
       )}
-
-      {/* Request Exchange Modal */}
       {isRequestExchangeOpen && (
         <div>
           <h2>Which queue do you wish to exchange with?</h2>
-          {/* Display your queues for exchange */}
-          {/* e.g., */}
           {myFutureQueues.map((queue) => (
-            <div key={queue.appointment_id}>
-              <span>{queue.date_time}</span>
-              <button onClick={() => handleRequestExchangeSubmit(queue)}>
+            <div className="queue-item" key={queue.appointment_id}>
+              <div className="queue-info">
+                <span className="queue-date">
+                  {new Date(queue.date_time).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                  })}
+                </span>
+              </div>
+              <button
+                className="queue-action-button"
+                onClick={() => handleRequestExchangeSubmit(queue)}
+              >
                 Submit an exchange request with this appointment
               </button>
             </div>
           ))}
-          {/* Add a button or link to close the modal */}
         </div>
       )}
       {modalVisible && <Modal message={modalMessage} onClose={closeModal} />}
