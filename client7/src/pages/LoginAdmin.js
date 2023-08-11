@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // Assuming you're using React Router for navigation
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "../css/Login.css";
 import { requestsGet } from "../requestsFromServer.js";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Modal from "./Modal";
+import avatarImage from "../media/avatar.png";
+import inSound from "../media/in.mp3";
 
 const LoginAdmin = () => {
   const navigate = useNavigate();
@@ -15,6 +17,11 @@ const LoginAdmin = () => {
     const name = event.target.name;
     const value = event.target.value;
     setInputs((values) => ({ ...values, [name]: value }));
+  };
+
+  const playSound = () => {
+    const audio = new Audio(inSound);
+    audio.play();
   };
 
   async function fetchData() {
@@ -29,19 +36,19 @@ const LoginAdmin = () => {
       if (status === 200) {
         localStorage.setItem("currentUserID", data.id);
         sessionStorage.setItem("token", data.token);
+        playSound();
         navigate("/HomeAdmin");
       } else {
-        //alert("Username or password is incorrect");
         setModalMessage("Username or password is incorrect");
         setModalVisible(true);
       }
     } catch (error) {
       console.error(error);
-      //alert("Username or password is incorrect11");
       setModalMessage("Username or password is incorrect");
       setModalVisible(true);
     }
   }
+
   const closeModal = () => {
     setModalVisible(false);
   };
@@ -56,6 +63,9 @@ const LoginAdmin = () => {
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit}>
+        <div className="avatar-container">
+          <img src={avatarImage} alt="Avatar" className="avatar-image" />
+        </div>
         <h1>Login As Admin</h1>
         <div className="form-group">
           <label htmlFor="username">Username:</label>

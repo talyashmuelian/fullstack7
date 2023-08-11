@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // Assuming you're using React Router for navigation
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "../css/Login.css";
 import { requestsGet } from "../requestsFromServer.js";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Modal from "./Modal";
+
+import avatarImage from "../media/avatar.png";
+import inSound from "../media/in.mp3";
 
 const Login = () => {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({});
-
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
@@ -18,33 +20,11 @@ const Login = () => {
     setInputs((values) => ({ ...values, [name]: value }));
   };
 
-  // async function fetchData() {
-  //   try {
-  //     const response = await requestsGet(
-  //       `/customers/logIn?username=${inputs.username}&password=${inputs.password}`
-  //     );
-  //     let data = await response.json();
-  //     let status = response.status;
-  //     console.log("line 158");
-  //     console.log(data);
-  //     if (status === 200) {
-  //       localStorage.setItem("currentUserID", data.id);
-  //       navigate("/HomeClients");
-  //     } else {
-  //       alert("Username or password is incorrect");
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert("Username or password is incorrect11");
-  //   }
-  // }
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("line177");
-    console.log(inputs);
     fetchData();
   };
+
   const fetchData = async () => {
     try {
       const response = await requestsGet(
@@ -55,6 +35,7 @@ const Login = () => {
 
       if (status === 200) {
         localStorage.setItem("currentUserID", data.id);
+        playSound();
         navigate("/HomeClients");
       } else {
         setModalMessage("Username or password is incorrect");
@@ -66,13 +47,22 @@ const Login = () => {
       setModalVisible(true);
     }
   };
+
   const closeModal = () => {
     setModalVisible(false);
+  };
+  const playSound = () => {
+    const audio = new Audio(inSound);
+    audio.play();
   };
 
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit}>
+        {" "}
+        <div className="avatar-container">
+          <img src={avatarImage} alt="Avatar" className="avatar-image" />
+        </div>
         <h1>Login</h1>
         <div className="form-group">
           <label htmlFor="username">Username:</label>

@@ -64,3 +64,15 @@
     text-decoration: underline;
   }
   
+  .avatar-container {
+    margin-top: 20px; /* Add space between login and avatar */
+    text-align: center;
+  }
+  
+  .avatar-image {
+    width: 80px; /* Adjust the width as needed */
+    height: 80px; /* Adjust the height as needed */
+    border-radius: 50%;
+    border: 2px solid #007bff;
+    background-color: #fff;
+  }
