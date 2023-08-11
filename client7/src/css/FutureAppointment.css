@@ -1,4 +1,4 @@
-/* History.css */
+/* 
 
 .history-container {
     font-family: Arial, sans-serif;
@@ -46,8 +46,6 @@
   .queue-row button:hover {
     background-color: #c2185b;
   }
-  
-  /* Optional: Add some responsive styles */
   @media (max-width: 480px) {
     .queue-row {
       flex-direction: column;
@@ -60,4 +58,44 @@
       margin-bottom: 5px;
     }
   }
-  
+   */
+   
+
+/* Styles for the history container */
+.history-container {
+  margin: 20px;
+}
+
+/* Queue row style */
+.history-container .queue-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px; /* Increased margin */
+}
+
+/* Queue date style */
+.history-container .queue-date {
+  color: #555;
+  font-size: 16px;
+  margin-right: 60px; /* Increased margin */
+}
+
+/* Queue action button style */
+.history-container .queue-action-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.history-container .queue-action-button:hover {
+  background-color: #2980b9;
+}

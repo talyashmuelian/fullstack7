@@ -1,27 +1,27 @@
-
+/* Styles for the history container */
 .history-container {
-    margin: 20px;
-  }
-  
-  .history-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .history-item {
-    background-color: #f0f0f0;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .queue-id {
-    font-weight: bold;
-  }
-  
-  .queue-date {
-    color: #555;
-  }
-  
-  
+  margin: 20px;
+}
+
+/* History list */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* History item style */
+.history-item {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Queue date style */
+.queue-date {
+  color: #555;
+  font-size: 16px;
+}
+
+
