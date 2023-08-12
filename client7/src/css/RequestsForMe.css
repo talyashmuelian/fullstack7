@@ -1,0 +1,58 @@
+/* RequestsForMe.css */
+.my-requests-container {
+    margin: 20px;
+ }
+ 
+ .no-requests {
+    text-align: center;
+    font-size: 18px;
+    color: #777;
+    padding: 20px;
+ }
+ 
+ .request-item {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column; /* Align sender-datetime and your-datetime vertically */
+    align-items: center;
+ }
+ 
+ .request-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+ }
+ 
+ .sender-datetime,
+ .your-datetime {
+    font-size: 16px;
+    color: #333;
+ }
+ 
+ .replacement-button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+ }
+ 
+ .replacement-button:hover {
+    background-color: #2980b9;
+ }
+ 
+ /* Add a border between sender's date and your date */
+ .request-item::after {
+    content: "";
+    width: 80%;
+    height: 1px;
+    background-color: #ddd;
+    margin: 10px auto;
+ }
+ 

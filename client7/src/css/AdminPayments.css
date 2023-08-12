@@ -1,0 +1,71 @@
+/* adminPayments.css */
+
+.admin-payments-container {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .payment-form {
+    width: 70%;
+    margin: 0 auto;
+  }
+  
+  .payment-form h2 {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .payment-form select,
+  .payment-form input,
+  .add-payment-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .add-payment-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .voucher-list {
+    width: 70%;
+    margin: 0 auto;
+  }
+  
+  .voucher-list h2 {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+  }
+  
+  th,
+  td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .delete-voucher-button {
+    background-color: #ff5555;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  

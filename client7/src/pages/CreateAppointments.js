@@ -99,7 +99,7 @@ const CreateAppointments = () => {
         />
       </div>
       <div className="input-container">
-        <label>Number of Queues per Day:</label>
+        <label>Number of appointment per Day:</label>
         <input
           type="number"
           value={numQueues}

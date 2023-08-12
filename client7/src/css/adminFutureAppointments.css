@@ -1,67 +1,72 @@
 /* adminFutureAppointments.css */
 
 .admin-future-appointments {
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    padding: 20px;
-  }
-  
-  .date-group {
-    width: 70%;
-    margin: 0 auto;
-  }
-  
-  .date-title {
-    display: flex;
-    align-items: center;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .expand-arrow {
-    margin-left: 5px;
-  }
-  
-  .queues-list {
-    padding-left: 20px;
-  }
-  
-  .queue {
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    background-color: #f5f5f5;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .queue-time {
-    font-size: 14px;
-    color: #555;
-  }
-  
-  .queue-details {
-    flex: 1;
-    padding-left: 10px;
-  }
-  
-  .queue-available {
-    font-style: italic;
-    color: #888;
-  }
-  
-  .cancel-button {
-    background-color: #ff5555;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.date-group {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.date-title {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.expand-arrow {
+  margin-left: 5px;
+}
+
+.queues-list {
+  padding-left: 20px;
+}
+
+.queue {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column; /* Adjusted to vertical layout */
+  align-items: stretch; /* Ensures items fill the width */
+}
+
+.queue-time {
+  font-size: 14px;
+  color: #555;
+}
+
+.queue-details {
+  padding-left: 10px;
+}
+
+.queue-available {
+  font-style: italic;
+  color: #888;
+  margin-top: 10px; /* Added margin at the top */
+}
+
+.cancel-button {
+  background-color: #3498db; /* Changed to blue color */
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px; /* Added margin at the top */
+}
+.queue-details {
+  padding-left: 10px;
+  flex-grow: 1;
+  overflow: hidden;
+}

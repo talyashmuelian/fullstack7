@@ -14,10 +14,14 @@ const MyRequests = () => {
 
   const fetchRequestsData = async () => {
     try {
-      // Assuming requests Get function returns an array of queue objects with appointment_id and date_time properties
       const response = await requestsGet(`/requests/myRequests/${customer_id}`);
       let data = await response.json();
       let data1 = data.requests;
+      // Sort the requests by sender_date_time in ascending order
+      data1.sort((a, b) =>
+        a.sender_date_time.localeCompare(b.sender_date_time)
+      );
+
       setRequestsList(data1);
     } catch (error) {
       console.error("Error fetching requests: ", error);
@@ -26,6 +30,7 @@ const MyRequests = () => {
 
   return (
     <div className="my-requests-container">
+      <h2>Requests I Created</h2>
       {requestsList.length === 0 ? (
         <div className="no-requests">No replacement requests</div>
       ) : (
@@ -33,10 +38,26 @@ const MyRequests = () => {
           <div key={request.id} className="request-item">
             <div className="request-details">
               <span className="sender-datetime">
-                Your: {request.sender_date_time}
+                Your:{" "}
+                {new Date(request.sender_date_time).toLocaleString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: true,
+                })}
               </span>
               <span className="your-datetime">
-                Recipient: {request.recipient_date_time}
+                Recipient:{" "}
+                {new Date(request.recipient_date_time).toLocaleString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: true,
+                })}
               </span>
             </div>
           </div>
