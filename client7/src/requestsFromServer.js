@@ -38,7 +38,6 @@ export async function requestsPut(path, object) {
     },
   });
   return response;
-  //return await response.json();
 }
 
 export async function requestsDelete(path) {
@@ -46,5 +45,4 @@ export async function requestsDelete(path) {
     method: "DELETE",
   });
   return response;
-  // return await response.json();
 }

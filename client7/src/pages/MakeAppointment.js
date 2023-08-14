@@ -164,7 +164,7 @@ const MakeAppointment = () => {
               className="queue-action-button"
               onClick={() => handleQueueButtonClick(queue)}
             >
-              Call for a Appointment
+              Take Appointment
             </button>
           )}
         </div>

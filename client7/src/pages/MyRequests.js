@@ -17,7 +17,6 @@ const MyRequests = () => {
       const response = await requestsGet(`/requests/myRequests/${customer_id}`);
       let data = await response.json();
       let data1 = data.requests;
-      // Sort the requests by sender_date_time in ascending order
       data1.sort((a, b) =>
         a.sender_date_time.localeCompare(b.sender_date_time)
       );

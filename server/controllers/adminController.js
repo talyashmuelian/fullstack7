@@ -12,7 +12,6 @@ exports.loginAdmin = async (req, res) => {
   console.log("hi");
   const { username, password } = req.query;
 
-  // Check if the username and password exist together in the database
   const loginQuery =
     "SELECT * FROM identification_customers natural join admin WHERE username = ?";
   con.query(loginQuery, [username], async (loginErr, loginResult) => {
@@ -58,12 +57,10 @@ exports.loginAdmin = async (req, res) => {
       } else {
         // Passwords do not match, authentication failed
         res.status(401).json({ error: "Invalid credentials" });
-        //res.send();
       }
     } catch (passwordError) {
       console.error("Error comparing passwords:", passwordError);
       res.status(500).json({ error: "Error comparing passwords" });
-      //res.send();
     }
   });
 };
@@ -82,13 +79,6 @@ exports.createAppointments = async (req, res) => {
   }
   const appointments = req.body.appointments;
   console.log(appointments);
-
-  // const { error } = Check.check("createAppointments", req.body.appointments);
-  // if (error) {
-  //   console.log(error.details[0].message);
-  //   res.status(400).send(error.details[0].message);
-  //   return;
-  // }
 
   try {
     // Loop through each appointment and insert if it doesn't exist

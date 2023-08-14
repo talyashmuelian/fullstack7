@@ -21,14 +21,12 @@ const schemaCustomer = Joi.object().keys({
 });
 
 const schemaRequest = Joi.object().keys({
-  //sender_client_id, recipient_appointment_id, sender_appointment_id
   sender_client_id: Joi.number().required(),
   recipient_appointment_id: Joi.number().required(),
   sender_appointment_id: Joi.number().required(),
 });
 
 const schemaAppointment = Joi.object().keys({
-  //customer_id, appointment_id, reminder, additionalInfo
   customer_id: Joi.number().required(),
   appointment_id: Joi.number().required(),
   reminder: Joi.number().required(),

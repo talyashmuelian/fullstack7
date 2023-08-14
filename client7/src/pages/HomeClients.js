@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { requestsGet } from "../requestsFromServer.js";
 import { useNavigate, NavLink, Navigate } from "react-router-dom";
 
-import "../css/HomeClients.css"; // Styles for the redesigned component
+import "../css/HomeClients.css";
 
 const HomeClients = () => {
   const navigate = useNavigate();

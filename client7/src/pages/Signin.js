@@ -1,12 +1,10 @@
 import { useState } from "react";
-//import ReactDOM from "react-dom/client";
 import "../css/Signin.css";
 import { Link } from "react-router-dom";
 import { useNavigate, NavLink } from "react-router-dom";
 import { requestsPost } from "../requestsFromServer";
 import Modal from "./Modal";
 
-//להיות בטוחה שהמספר זהות יהיה זהה בים שני האובייקטים
 const Signin = () => {
   const navigate = useNavigate();
   const [customer, setCustomer] = useState({
@@ -39,28 +37,6 @@ const Signin = () => {
 
   async function fetchData() {}
 
-  async function fetchInfo() {
-    // try {
-    //   setvisibilityMoreInfo({ visibility: "hidden" });
-    //   let newInUser = {
-    //     id: user.id,
-    //     name: inputs.name || "name",
-    //     username: user.username,
-    //     email: inputs.email || "email",
-    //     phone: inputs.phone || "0",
-    //     website: inputs.website || "website",
-    //     rank: "user",
-    //     api_key: "0",
-    //   };
-    //   setInputs({});
-    //   //var json = JSON.stringify(newInUser);
-    //   console.log(newInUser);
-    //   //requestsPost(`/users`, newInUser);
-    // } catch (error) {
-    //   console.error(error);
-    // }
-  }
-
   const MoreInfo = function () {
     setvisibilityMoreInfo({ visibility: "visible" });
   };
@@ -69,38 +45,22 @@ const Signin = () => {
     try {
       event.preventDefault();
       console.log("line36");
-      //console.log(user);
-      //await fetchInfo();
       try {
         console.log(customer);
         let response = await requestsPost(`/customers/signIn`, customer);
 
-        // setCustomer({
-        //   id: 0,
-        //   username: "",
-        //   password: "",
-        //   name: "",
-        //   id_number: "",
-        //   phone: "",
-        //   email: "",
-        // });
         if (response.status === 200) {
           let data = await response.json();
           localStorage.setItem("currentUserID", data.customer_id);
           navigate("/HomeClients");
         } else {
-          //alert("username alrady exist");
           setModalMessage("username alrady exist");
           setModalVisible(true);
         }
       } catch (error) {
         console.error(error);
       }
-
-      //window.location.href = "/Login";
-    } catch {
-      //error
-    }
+    } catch {}
   };
   const closeModal = () => {
     setModalVisible(false);

@@ -4,8 +4,6 @@ var Check = require("../models/check");
 exports.signinCustomer = (req, res) => {
   const { username, password, name, id_number, phone, email } = req.body;
   const { error } = Check.check("customer", req.body);
-  //   const { error } = Check.check("identification_customers", req.body);
-  //   const { error1 } = Check.check("customer_information", req.body);
   if (error) {
     console.log("line9");
     console.log(error.details[0].message);
@@ -67,8 +65,6 @@ exports.signinCustomer = (req, res) => {
   });
 };
 
-// postsRouter.js (Assuming you already have the required imports and database configuration)
-
 exports.loginCustomer = async (req, res) => {
   console.log("hi73");
   const { username, password } = req.query;
@@ -81,7 +77,6 @@ exports.loginCustomer = async (req, res) => {
       console.error("Error checking login credentials:", loginErr);
 
       res.status(500).json({ error: "Error checking login credentials" });
-      //  res.send();
     }
 
     // If no user with the given username is found, return an error
@@ -89,7 +84,6 @@ exports.loginCustomer = async (req, res) => {
       console.log("Invalid credentials");
 
       res.status(404).json({ error: "Invalid credentials" });
-      //res.send();
     }
 
     // Compare the provided password with the hashed password from the database
@@ -99,19 +93,14 @@ exports.loginCustomer = async (req, res) => {
       const isPasswordValid = password === hashedPassword;
 
       if (isPasswordValid) {
-        // Passwords match, user is authenticated
-        // res.status(200).json({ message: "Login successful", });
         res.status(200).json({ id: loginResult[0].customer_id });
-        //res.send();
       } else {
         // Passwords do not match, authentication failed
         res.status(401).json({ error: "Invalid credentials" });
-        //res.send();
       }
     } catch (passwordError) {
       console.error("Error comparing passwords:", passwordError);
       res.status(500).json({ error: "Error comparing passwords" });
-      //res.send();
     }
   });
 };

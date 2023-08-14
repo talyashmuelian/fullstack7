@@ -33,7 +33,6 @@ const CreateAppointments = () => {
         for (let i = 0; i < numQueues; i++) {
           appointments.push(currentDateTime.toISOString());
 
-          // Increment the current time by the meeting duration
           currentDateTime = new Date(
             currentDateTime.getTime() + meetingDuration * 60 * 1000
           );
@@ -51,10 +50,8 @@ const CreateAppointments = () => {
           appointments: appointments,
         }
       );
-      // Handle the response as needed
       if (response.status == 200) {
         console.log("The appointments have been successfully added!", response);
-        //alert("The appointments have been successfully added!");
         setModalMessage("The appointments have been successfully added!");
         setModalVisible(true);
       }

@@ -20,7 +20,6 @@ const CustomerPayments = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        // Fetch vouchers from the server and update the state
         let response = await requestsGet(
           `/payments/allVouchers?userId=${customer_id}`
         );
@@ -54,17 +53,14 @@ const CustomerPayments = () => {
     setUnpaidVouchers(unpaid);
   };
   const handlePay = async (voucherId) => {
-    // Call your server's payment endpoint
     try {
       console.log("before fetch pay");
       let response = await requestsPut(`/payments/pay/${voucherId}`, {});
       console.log("after fetch pay");
       if (response.status !== 200) {
-        //alert("error handleing payment");
         setModalMessage("error handleing payment");
         setModalVisible(true);
       } else {
-        // Update the state to mark the voucher as paid
         const updatedVouchers = vouchers.map((voucher) =>
           voucher.voucher_id === voucherId
             ? {
@@ -80,7 +76,6 @@ const CustomerPayments = () => {
       }
     } catch (error) {
       console.error("Error making payment:", error);
-      //alert("error handleing payment");
       setModalMessage("error handleing payment");
       setModalVisible(true);
     }

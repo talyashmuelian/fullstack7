@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { requestsGet, requestsPost } from "../requestsFromServer.js";
-import "../css/History.css"; // Your original CSS for the component
+import "../css/History.css";
 
 const History = () => {
   const [historyData, setHistoryData] = useState([]);
@@ -19,7 +19,6 @@ const History = () => {
       );
       let data = await response.json();
 
-      // Sort the history data by date_time in ascending order
       data.sort((a, b) => a.date_time.localeCompare(b.date_time));
 
       setHistoryData([...data]);
